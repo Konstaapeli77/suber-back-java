@@ -28,6 +28,8 @@ Set %JAVA_HOME%\bin in global and user PATHs.
       java-version: 11
       distribution: 'adopt'
 
+## jää pois
+
 - name: Setup Maven
   uses: stCarolas/setup-maven@v.4.5
 
