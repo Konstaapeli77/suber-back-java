@@ -16,6 +16,7 @@ jobs:
         uses: actions/setup-java@v3.8.0
         with:
           java-version: '11'
+          distribution: 'adopt'
 
       - name: Setup Maven
         uses: stCarolas/setup-maven@v.4.5
