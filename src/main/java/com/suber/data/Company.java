@@ -10,13 +10,13 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "PERSON")
-public class Person {
+@Table(name = "COMPANY")
+public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String firstName;
-    private String lastName;
+    private String name;
+    private String businessId;
 
 }

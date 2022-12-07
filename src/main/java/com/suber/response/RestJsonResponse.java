@@ -23,12 +23,12 @@ public class RestJsonResponse {
         ArrayList<Person> arr = new ArrayList<>();
 
         Person userOne = new Person();
-        userOne.setId(1);
+        userOne.setId(3);
         userOne.setFirstName("Mikko");
         userOne.setLastName("Mallikas");
 
         Person userTwo = new Person();
-        userTwo.setId(2);
+        userTwo.setId(4);
         userTwo.setFirstName("Niina");
         userTwo.setLastName("Nieminen");
 
