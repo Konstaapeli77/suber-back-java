@@ -70,6 +70,8 @@ jobs:
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Konstaapeli77_suber-back-java
 
   publish:
+    needs: sonar
+    name: JAR Publishing to GitHub packages
     runs-on: ubuntu-latest
     permissions:
       contents: read
