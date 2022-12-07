@@ -18,6 +18,13 @@
 		<sonar.organization>konstaapeli77</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub Konstaapeli77 Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/Konstaapeli77/suber-back-java</url>
+		</repository>
+	</distributionManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
