@@ -1,4 +1,4 @@
-package com.suber.suber.data;
+package com.suber.data;
 
 import lombok.Data;
 

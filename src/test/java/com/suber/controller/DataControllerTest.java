@@ -1,4 +1,4 @@
-package com.suber.suber.controller;
+package com.suber.controller;
 
 
 import org.junit.jupiter.api.Test;

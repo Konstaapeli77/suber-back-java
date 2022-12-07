@@ -1,8 +1,8 @@
-package com.suber.suber.response;
+package com.suber.response;
 
 import java.util.ArrayList;
 
-import com.suber.suber.data.Person;
+import com.suber.data.Person;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

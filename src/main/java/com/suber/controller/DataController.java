@@ -1,4 +1,4 @@
-package com.suber.suber.controller;
+package com.suber.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
