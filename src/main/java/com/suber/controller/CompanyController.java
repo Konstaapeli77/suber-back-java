@@ -1,5 +1,6 @@
 package com.suber.controller;
 
+import com.suber.controller.wrapper.CompanyList;
 import com.suber.data.Company;
 import com.suber.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class CompanyController {
     CompanyRepository repository;
 
     @GetMapping("/companies")
-    public ResponseEntity<List<Company>> getAllCompanies(@RequestParam(required = false) String name) {
+    public ResponseEntity<CompanyList> getAllCompanies(@RequestParam(required = false) String name) {
         try {
             List<Company> companies = new ArrayList<Company>();
 
@@ -33,7 +34,8 @@ public class CompanyController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            return new ResponseEntity<>(companies, HttpStatus.OK);
+            //return new ResponseEntity<>(companies, HttpStatus.OK);
+            return new ResponseEntity<>(new CompanyList(companies), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -97,28 +99,28 @@ public class CompanyController {
     }
 
     @GetMapping("/companies/name")
-    public ResponseEntity<List<Company>> findByName(@PathVariable("name") String name) {
+    public ResponseEntity<CompanyList> findByName(@PathVariable("name") String name) {
         try {
             List<Company> companies = repository.findByName(name);
 
             if (companies.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(companies, HttpStatus.OK);
+            return new ResponseEntity<>(new CompanyList(companies), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/companies/businessId")
-    public ResponseEntity<List<Company>> findByBusinessId(@PathVariable("businessId") String businessId) {
+    public ResponseEntity<CompanyList> findByBusinessId(@PathVariable("businessId") String businessId) {
         try {
             List<Company> companies = repository.findByBusinessId(businessId);
 
             if (companies.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(companies, HttpStatus.OK);
+            return new ResponseEntity<>(new CompanyList(companies), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

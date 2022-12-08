@@ -1,6 +1,7 @@
 package com.suber.data;
 
 import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity

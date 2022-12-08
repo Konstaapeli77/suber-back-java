@@ -1,13 +1,13 @@
-package com.suber;
+package com.suber.configuration.context;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SuberApplicationTests {
+public class ContextTest {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    public void contextLoads() {
+    }
 
 }
