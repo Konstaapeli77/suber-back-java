@@ -82,7 +82,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Publish package
-        run: mvn --batch-mode deploy
+        run: mvn --batch-mode deploy -Dspring.profiles.active=test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
