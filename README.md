@@ -26,6 +26,26 @@ docker:
   name: Push to Docker Hub
   runs-on: ubuntu-latest
   steps:
+    - name: Checkout
+      uses: actions/checkout@v2.5.0
+
+    - name: Setup Java JDK
+      uses: actions/setup-java@v3.8.0
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+
+    - name: Cache local Maven repository
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    - name: Run Tests
+      run: mvn -B package -Dspring.profiles.active=test
+
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
 
