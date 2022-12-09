@@ -7,6 +7,12 @@ Project has also docker capabilities.
 
 ## Docker commands
 
+Launch Postgres container:
+```
+docker run -p 5432:5432 --name suber-postgres -e POSTGRES_PASSWORD=password -d postgres
+docker run -p 5432:5432 --name suber-postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=dev -d postgres
+```
+
 To build and run docker use these commands:
 ```
 docker build -t springio/gs-spring-boot-docker .

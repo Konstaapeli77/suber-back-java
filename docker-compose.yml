@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  postgresdb:
+    image: postgres:15
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=prod
+    ports:
+      - '5433:5432'
+
+  my-custom-app:
+    build: .
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    depends_on:
+      - postgresdb
+    command: --spring.profiles.active=prod
