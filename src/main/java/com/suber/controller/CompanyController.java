@@ -2,7 +2,9 @@ package com.suber.controller;
 
 import com.suber.controller.wrapper.CompanyList;
 import com.suber.data.Company;
+import com.suber.dto.CompanyDTO;
 import com.suber.repository.CompanyRepository;
+import com.suber.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,9 @@ public class CompanyController {
 
     @Autowired
     CompanyRepository repository;
+
+    @Autowired
+    CompanyService companyService;
 
     @GetMapping("/companies")
     public ResponseEntity<CompanyList> getAllCompanies(@RequestParam(required = false) String name) {
@@ -53,10 +58,10 @@ public class CompanyController {
     }
 
     @PostMapping("/companies")
-    public ResponseEntity<Company> createCompany(@RequestBody Company company) {
+    public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO company) {
         try {
-            Company _company = repository
-                    .save(new Company(company.getName(), company.getBusinessId()));
+            CompanyDTO _company = companyService
+                    .save(new CompanyDTO(company.getName(), company.getBusinessId()));
             return new ResponseEntity<>(_company, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
