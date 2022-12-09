@@ -87,7 +87,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   docker:
-    needs: sonar
+    needs: publish
     name: Push container to Docker Hub
     runs-on: ubuntu-latest
     steps:
