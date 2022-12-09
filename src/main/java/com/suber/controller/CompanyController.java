@@ -3,6 +3,7 @@ package com.suber.controller;
 import com.suber.controller.wrapper.CompanyList;
 import com.suber.data.Company;
 import com.suber.dto.CompanyDTO;
+import com.suber.dto.CompanyListDTO;
 import com.suber.repository.CompanyRepository;
 import com.suber.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,35 +21,32 @@ import java.util.Optional;
 public class CompanyController {
 
     @Autowired
-    CompanyRepository repository;
-
-    @Autowired
     CompanyService companyService;
 
     @GetMapping("/companies")
-    public ResponseEntity<CompanyList> getAllCompanies(@RequestParam(required = false) String name) {
+    public ResponseEntity<CompanyListDTO> getAllCompanies(@RequestParam(required = false) String name) {
         try {
-            List<Company> companies = new ArrayList<Company>();
+            List<CompanyDTO> companies = new ArrayList<CompanyDTO>();
 
             if (name == null)
-                repository.findAll().forEach(companies::add);
+                companyService.findAll().forEach(companies::add);
             else
-                repository.findByName(name).forEach(companies::add);
+                companyService.findByName(name).forEach(companies::add);
 
             if (companies.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
             //return new ResponseEntity<>(companies, HttpStatus.OK);
-            return new ResponseEntity<>(new CompanyList(companies), HttpStatus.OK);
+            return new ResponseEntity<>(new CompanyListDTO(companies), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/companies/{id}")
-    public ResponseEntity<Company> getCompanyById(@PathVariable("id") long id) {
-        Optional<Company> companyData = repository.findById(id);
+    public ResponseEntity<CompanyDTO> getCompanyById(@PathVariable("id") long id) {
+        Optional<CompanyDTO> companyData = companyService.findById(id);
 
         if (companyData.isPresent()) {
             return new ResponseEntity<>(companyData.get(), HttpStatus.OK);
@@ -69,14 +67,14 @@ public class CompanyController {
     }
 
     @PutMapping("/companies/{id}")
-    public ResponseEntity<Company> updateCompany(@PathVariable("id") long id, @RequestBody Company company) {
-        Optional<Company> companyData = repository.findById(id);
+    public ResponseEntity<CompanyDTO> updateCompany(@PathVariable("id") long id, @RequestBody CompanyDTO company) {
+        Optional<CompanyDTO> companyData = companyService.findById(id);
 
         if (companyData.isPresent()) {
-            Company _company = companyData.get();
+            CompanyDTO _company = companyData.get();
             _company.setName(company.getName());
             _company.setBusinessId(company.getBusinessId());
-            return new ResponseEntity<>(repository.save(_company), HttpStatus.OK);
+            return new ResponseEntity<>(companyService.save(_company), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -85,7 +83,7 @@ public class CompanyController {
     @DeleteMapping("/companies/{id}")
     public ResponseEntity<HttpStatus> deleteCompany(@PathVariable("id") long id) {
         try {
-            repository.deleteById(id);
+            companyService.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -95,7 +93,7 @@ public class CompanyController {
     @DeleteMapping("/companies")
     public ResponseEntity<HttpStatus> deleteAllCompanies() {
         try {
-            repository.deleteAll();
+            companyService.deleteAll();
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -104,28 +102,28 @@ public class CompanyController {
     }
 
     @GetMapping("/companies/name")
-    public ResponseEntity<CompanyList> findByName(@PathVariable("name") String name) {
+    public ResponseEntity<CompanyListDTO> findByName(@PathVariable("name") String name) {
         try {
-            List<Company> companies = repository.findByName(name);
+            List<CompanyDTO> companies = companyService.findByName(name);
 
             if (companies.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(new CompanyList(companies), HttpStatus.OK);
+            return new ResponseEntity<>(new CompanyListDTO(companies), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/companies/businessId")
-    public ResponseEntity<CompanyList> findByBusinessId(@PathVariable("businessId") String businessId) {
+    public ResponseEntity<CompanyListDTO> findByBusinessId(@PathVariable("businessId") String businessId) {
         try {
-            List<Company> companies = repository.findByBusinessId(businessId);
+            List<CompanyDTO> companies = companyService.findByBusinessId(businessId);
 
             if (companies.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(new CompanyList(companies), HttpStatus.OK);
+            return new ResponseEntity<>(new CompanyListDTO(companies), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

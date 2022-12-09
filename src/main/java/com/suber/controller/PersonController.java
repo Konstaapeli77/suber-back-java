@@ -1,7 +1,9 @@
 package com.suber.controller;
 
 import com.suber.data.Person;
-import com.suber.repository.PersonRepository;
+import com.suber.dto.PersonDTO;
+import com.suber.dto.PersonListDTO;
+import com.suber.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,33 +17,33 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class PersonController {
-
     @Autowired
-    PersonRepository repository;
+    PersonService personService;
 
     @GetMapping("/persons")
-    public ResponseEntity<List<Person>> getAllCompanies(@RequestParam(required = false) String lastname) {
+    public ResponseEntity<PersonListDTO> getAllPersons(@RequestParam(required = false) String lastname) {
         try {
-            List<Person> persons = new ArrayList<Person>();
+            List<PersonDTO> persons = new ArrayList<PersonDTO>();
 
             if (lastname == null)
-                repository.findAll().forEach(persons::add);
+                personService.findAll().forEach(persons::add);
             else
-                repository.findByLastname(lastname).forEach(persons::add);
+                personService.findByLastname(lastname).forEach(persons::add);
 
             if (persons.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            return new ResponseEntity<>(persons, HttpStatus.OK);
+            //return new ResponseEntity<>(persons, HttpStatus.OK);
+            return new ResponseEntity<>(new PersonListDTO(persons), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/persons/{id}")
-    public ResponseEntity<Person> getPersonById(@PathVariable("id") long id) {
-        Optional<Person> personData = repository.findById(id);
+    public ResponseEntity<PersonDTO> getPersonById(@PathVariable("id") long id) {
+        Optional<PersonDTO> personData = personService.findById(id);
 
         if (personData.isPresent()) {
             return new ResponseEntity<>(personData.get(), HttpStatus.OK);
@@ -51,10 +53,10 @@ public class PersonController {
     }
 
     @PostMapping("/persons")
-    public ResponseEntity<Person> createPerson(@RequestBody Person person) {
+    public ResponseEntity<PersonDTO> createPerson(@RequestBody PersonDTO person) {
         try {
-            Person _person = repository
-                    .save(new Person(person.getFirstname(), person.getLastname()));
+            PersonDTO _person = personService
+                    .save(new PersonDTO(person.getFirstname(), person.getLastname()));
             return new ResponseEntity<>(_person, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -62,14 +64,14 @@ public class PersonController {
     }
 
     @PutMapping("/persons/{id}")
-    public ResponseEntity<Person> updatePerson(@PathVariable("id") long id, @RequestBody Person person) {
-        Optional<Person> personData = repository.findById(id);
+    public ResponseEntity<PersonDTO> updatePerson(@PathVariable("id") long id, @RequestBody PersonDTO person) {
+        Optional<PersonDTO> personData = personService.findById(id);
 
         if (personData.isPresent()) {
-            Person _person = personData.get();
+            PersonDTO _person = personData.get();
             _person.setFirstname(person.getFirstname());
             _person.setLastname(person.getLastname());
-            return new ResponseEntity<>(repository.save(_person), HttpStatus.OK);
+            return new ResponseEntity<>(personService.save(_person), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -78,7 +80,7 @@ public class PersonController {
     @DeleteMapping("/persons/{id}")
     public ResponseEntity<HttpStatus> deletePerson(@PathVariable("id") long id) {
         try {
-            repository.deleteById(id);
+            personService.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -88,7 +90,7 @@ public class PersonController {
     @DeleteMapping("/persons")
     public ResponseEntity<HttpStatus> deleteAllPersons() {
         try {
-            repository.deleteAll();
+            personService.deleteAll();
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -96,32 +98,31 @@ public class PersonController {
 
     }
 
+    @GetMapping("/persons/name")
+    public ResponseEntity<PersonListDTO> findByFirstname(@PathVariable("firstname") String firstname) {
+        try {
+            List<PersonDTO> persons = personService.findByLastname(firstname);
+
+            if (persons.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(new PersonListDTO(persons), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/persons/lastname")
-    public ResponseEntity<List<Person>> findByLastname(@PathVariable("lastname") String lastname) {
+    public ResponseEntity<PersonListDTO> findByLastname(@PathVariable("lastname") String lastname) {
         try {
-            List<Person> persons = repository.findByLastname(lastname);
+            List<PersonDTO> persons = personService.findByLastname(lastname);
 
             if (persons.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(persons, HttpStatus.OK);
+            return new ResponseEntity<>(new PersonListDTO(persons), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @GetMapping("/persons/firstname")
-    public ResponseEntity<List<Person>> findByFirstname(@PathVariable("firstname") String firstname) {
-        try {
-            List<Person> persons = repository.findByFirstname(firstname);
-
-            if (persons.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(persons, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
 }
