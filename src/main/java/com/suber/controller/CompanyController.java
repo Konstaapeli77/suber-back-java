@@ -30,17 +30,12 @@ public class CompanyController {
     @GetMapping("/companies")
     public ResponseEntity<CompanyListDTO> getAllCompanies(@RequestParam(required = false) String name) {
         try {
-            logger.log(Level.INFO, "getAllCompanies() - start");
             List<CompanyDTO> companies = new ArrayList<CompanyDTO>();
-            logger.log(Level.INFO, "1");
 
             if (name == null) {
-                logger.log(Level.INFO, "1a");
                 companyService.findAll().forEach(companies::add);
-                logger.log(Level.INFO, "2");
             } else {
                 companyService.findByName(name).forEach(companies::add);
-                logger.log(Level.INFO, "3");
             }
 
 
@@ -49,10 +44,6 @@ public class CompanyController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            logger.log(Level.INFO, "companies: " + companies);
-
-            //return new ResponseEntity<>(companies, HttpStatus.OK);
-            logger.log(Level.INFO, "getAllCompanies() - end");
             return new ResponseEntity<>(new CompanyListDTO(companies), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

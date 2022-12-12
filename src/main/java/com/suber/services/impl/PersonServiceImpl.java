@@ -5,6 +5,9 @@ import com.suber.dto.PersonDTO;
 import com.suber.repository.PersonRepository;
 import com.suber.services.PersonService;
 import com.suber.util.mapper.DataMapper;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +18,7 @@ import java.util.Optional;
 @Component
 public class PersonServiceImpl implements PersonService {
 
+    Logger logger = LogManager.getLogger(PersonServiceImpl.class);
     @Autowired
     PersonRepository personRepository;
 
@@ -29,8 +33,13 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Optional<PersonDTO> findById(long id) {
         Optional<Person> person = personRepository.findById(id);
-        //PersonDTO originalPersonDTO = mapper.map(person, PersonDTO.class);
-        PersonDTO originalPersonDTO = DataMapper.personToDTO(person.get());
+        PersonDTO originalPersonDTO = new PersonDTO();
+        if (person.isPresent()) {
+            originalPersonDTO = DataMapper.personToDTO(person.get());
+        } else {
+            logger.log(Level.INFO, "Optional<Person> is null!");
+        }
+
         Optional<PersonDTO> personDTO= Optional.of(originalPersonDTO);
         return personDTO;
     }

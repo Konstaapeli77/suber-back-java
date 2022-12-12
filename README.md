@@ -63,4 +63,42 @@ docker:
       with:
         push: true
         tags: user/app:latest
-   
+
+## Sonar
+
+```
+sonar:
+  needs: tests
+  name: SonarCloud analysis
+  runs-on: ubuntu-latest
+  steps:
+      - name: Checkout
+        uses: actions/checkout@v2.5.0
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3.8.0
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Konstaapeli77_suber-back-java -Dspring.profiles.active=test
+```

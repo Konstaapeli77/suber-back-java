@@ -28,7 +28,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Optional<OrderDTO> findById(long id) {
         Optional<Order> order = orderRepository.findById(id);
-        OrderDTO originalOrderDTO = DataMapper.orderToDTO(order.get());
+        OrderDTO originalOrderDTO = new OrderDTO();
+        if (order.isPresent()) {
+            originalOrderDTO = DataMapper.orderToDTO(order.get());
+        }
         Optional<OrderDTO> orderDTO= Optional.of(originalOrderDTO);
         return orderDTO;
     }

@@ -33,24 +33,15 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<CompanyDTO> findAll() {
-        logger.log(Level.INFO, "4");
         List<CompanyDTO> companiesDTO = new ArrayList<CompanyDTO>();
-        logger.log(Level.INFO, "5");
         List<Company> companies = new ArrayList<Company>();
-        logger.log(Level.INFO, "6");
         repository.findAll().forEach(companies::add);
-        logger.log(Level.INFO, "7 - companies" + companies);
         int number = 7;
         for (Company company:companies) {
             number++;
-            logger.log(Level.INFO, number);
             CompanyDTO companyDTO = DataMapper.companyToDTO(company);
-            //CompanyDTO companyDTO = mapper.map(company, CompanyDTO.class);
-            logger.log(Level.INFO, number + " beta");
             companiesDTO.add(companyDTO);
         }
-        logger.log(Level.INFO, "end loop");
-
         return companiesDTO;
     }
 
@@ -61,7 +52,6 @@ public class CompanyServiceImpl implements CompanyService {
         repository.findByName(name).forEach(companies::add);
         for (Company company:companies) {
             CompanyDTO companyDTO = DataMapper.companyToDTO(company);
-//            CompanyDTO companyDTO = mapper.map(company, CompanyDTO.class);
             companiesDTO.add(companyDTO);
         }
         return companiesDTO;
@@ -74,7 +64,6 @@ public class CompanyServiceImpl implements CompanyService {
         repository.findByBusinessId(id).forEach(companies::add);
         for (Company company:companies) {
             CompanyDTO companyDTO = DataMapper.companyToDTO(company);
-//            CompanyDTO companyDTO = mapper.map(company, CompanyDTO.class);
             companiesDTO.add(companyDTO);
         }
         return companiesDTO;

@@ -5,12 +5,14 @@ import com.suber.data.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
 @Builder
+@RequiredArgsConstructor
 @AllArgsConstructor
 public class PersonDTO {
 

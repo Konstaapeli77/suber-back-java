@@ -7,6 +7,7 @@ import com.suber.data.Service;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Data
 @Builder
+@RequiredArgsConstructor
 @AllArgsConstructor
 public class OrderDTO {
 

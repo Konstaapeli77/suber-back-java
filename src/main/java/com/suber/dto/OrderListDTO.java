@@ -15,7 +15,8 @@ public class OrderListDTO {
     public OrderListDTO() {
         orders = new ArrayList<>();
     }
-    public OrderListDTO(List<OrderDTO> persons) {
+    public OrderListDTO(List<OrderDTO> orders) {
+
         this.orders = orders;
     }
 }
