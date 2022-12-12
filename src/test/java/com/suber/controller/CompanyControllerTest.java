@@ -2,6 +2,7 @@ package com.suber.controller;
 
 import com.suber.controller.wrapper.CompanyList;
 import com.suber.data.Company;
+import com.suber.repository.CompanyRepository;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -15,15 +16,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CompanyControllerTest {
-
-    private static final Logger log = LoggerFactory.getLogger(CompanyControllerTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(CompanyControllerTest.class);
     @Autowired
     CompanyController controller;
+
+    @Autowired
+    CompanyRepository repository;
 
     @LocalServerPort
     private int port;
@@ -38,10 +42,22 @@ class CompanyControllerTest {
 
     @Test
     public void companiesPostShouldSucceed() throws Exception {
+
+        //System.out.println("1");
+        //List<Company> companies = repository.findAll();
+        //System.out.println("2 companies: " + companies);
+
         /*
         final String baseUrl = "http://localhost:" + port + "/companies/";
         URI uri = new URI(baseUrl);
-        Company company = new Company("Valio Oy", "123111-1");
+        Company company = Company.builder()
+                //.id(4)
+                .name("Valio Oy")
+                .address(null)
+                .businessId("123441-1")
+                .orders(null)
+                .services(null)
+                .build();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
@@ -52,6 +68,9 @@ class CompanyControllerTest {
         Assert.assertEquals(201, result.getStatusCodeValue());
 
          */
+        Assert.assertEquals(1,1);
+
+
     }
 
 

@@ -4,12 +4,12 @@ import com.suber.data.Person;
 import com.suber.dto.PersonDTO;
 import com.suber.repository.PersonRepository;
 import com.suber.services.PersonService;
-import com.suber.util.mapper.DataMapper;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.suber.util.mapper.DataMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class PersonServiceImpl implements PersonService {
         Optional<Person> person = personRepository.findById(id);
         PersonDTO originalPersonDTO = new PersonDTO();
         if (person.isPresent()) {
-            originalPersonDTO = DataMapper.personToDTO(person.get());
+            originalPersonDTO = DataMapper.convertToDto(person.get());
         } else {
             logger.log(Level.INFO, "Optional<Person> is null!");
         }
@@ -46,13 +46,17 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<PersonDTO> findAll() {
+        logger.info("1");
         List<PersonDTO> personsDTO = new ArrayList<PersonDTO>();
         List<Person> persons = new ArrayList<Person>();
         personRepository.findAll().forEach(persons::add);
+        logger.info("2");
         for (Person person:persons) {
-            PersonDTO personDTO = DataMapper.personToDTO(person);
+            logger.info("3");
+            PersonDTO personDTO = DataMapper.convertToDto(person);
             personsDTO.add(personDTO);
         }
+        logger.info("4");
         return personsDTO;
     }
 
@@ -67,7 +71,7 @@ public class PersonServiceImpl implements PersonService {
         List<Person> persons = new ArrayList<Person>();
         personRepository.findByLastname(id).forEach(persons::add);
         for (Person person:persons) {
-            PersonDTO personDTO = DataMapper.personToDTO(person);
+            PersonDTO personDTO = DataMapper.convertToDto(person);
             personsDTO.add(personDTO);
         }
         return personsDTO;

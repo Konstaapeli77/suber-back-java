@@ -20,7 +20,5 @@ public class CompanyDTO {
     private long id;
     private String name;
     private String businessId;
-    private List<Order> orders;
-    private List<Service> services;
-    private Address address;
+
 }

@@ -38,9 +38,7 @@ public class CompanyController {
                 companyService.findByName(name).forEach(companies::add);
             }
 
-
             if (companies.isEmpty()) {
-                logger.log(Level.INFO, "4");
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
@@ -64,10 +62,12 @@ public class CompanyController {
     @PostMapping("/companies")
     public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO company) {
         try {
-            CompanyDTO _company = companyService
-                    .save(company);
+            logger.info("post-1");
+            CompanyDTO _company = companyService.save(company);
+            logger.info("post-2");
             return new ResponseEntity<>(_company, HttpStatus.CREATED);
         } catch (Exception e) {
+            logger.log(Level.ERROR, "Error in create company: " + e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

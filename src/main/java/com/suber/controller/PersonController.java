@@ -4,6 +4,9 @@ import com.suber.data.Person;
 import com.suber.dto.PersonDTO;
 import com.suber.dto.PersonListDTO;
 import com.suber.services.PersonService;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class PersonController {
+
+    Logger logger = LogManager.getLogger(PersonController.class);
+
     @Autowired
     PersonService personService;
 
@@ -37,6 +43,7 @@ public class PersonController {
             //return new ResponseEntity<>(persons, HttpStatus.OK);
             return new ResponseEntity<>(new PersonListDTO(persons), HttpStatus.OK);
         } catch (Exception e) {
+            logger.log(Level.ERROR, "Error in getAllPersons: " + e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

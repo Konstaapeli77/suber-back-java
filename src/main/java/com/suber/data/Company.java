@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,9 +12,8 @@ import java.util.Optional;
 
 @Entity
 @Data
-@Builder
-@RequiredArgsConstructor
-@AllArgsConstructor
+//@RequiredArgsConstructor
+//@AllArgsConstructor
 @Table(name = "company")
 public class Company {
     @Id
@@ -32,5 +32,4 @@ public class Company {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
-
 }

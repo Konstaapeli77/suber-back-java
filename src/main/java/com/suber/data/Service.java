@@ -29,7 +29,5 @@ public class Service {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private List<Person> workers;
-    //@ManyToOne
-    //@JoinColumn(name = "company_id", referencedColumnName = "id")
-    //private Company company;
+
 }

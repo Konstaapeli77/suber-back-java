@@ -8,7 +8,6 @@ import com.suber.util.mapper.DataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +19,7 @@ public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
 
     public OrderDTO save(OrderDTO orderDTO) {
-        Order order = DataMapper.orderDTOToOrder(orderDTO);
+        Order order = DataMapper.convertToEntity(orderDTO);
         orderRepository.save(order);
         return orderDTO;
     }
@@ -30,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
         Optional<Order> order = orderRepository.findById(id);
         OrderDTO originalOrderDTO = new OrderDTO();
         if (order.isPresent()) {
-            originalOrderDTO = DataMapper.orderToDTO(order.get());
+            originalOrderDTO = DataMapper.convertToDto(order.get());
         }
         Optional<OrderDTO> orderDTO= Optional.of(originalOrderDTO);
         return orderDTO;
@@ -43,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.findAll().forEach(orders::add);
         for (Order order:orders) {
 //            OrderDTO orderDTO = mapper.map(order, OrderDTO.class);
-            OrderDTO orderDTO = DataMapper.orderToDTO(order);
+            OrderDTO orderDTO = DataMapper.convertToDto(order);
             ordersDTO.add(orderDTO);
         }
         return ordersDTO;
@@ -56,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.findByReference(reference).forEach(orders::add);
         for (Order order:orders) {
             //OrderDTO orderDTO = mapper.map(order, OrderDTO.class);
-            OrderDTO orderDTO = DataMapper.orderToDTO(order);
+            OrderDTO orderDTO = DataMapper.convertToDto(order);
             ordersDTO.add(orderDTO);
         }
         return ordersDTO;

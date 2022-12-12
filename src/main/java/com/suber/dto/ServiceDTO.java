@@ -18,7 +18,6 @@ public class ServiceDTO {
     private String name;
     private BigDecimal price;
     private String description;
-    private List<Person> workers;
-    private Company company;
+    private CompanyDTO company;
 
 }

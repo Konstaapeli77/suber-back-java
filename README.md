@@ -5,6 +5,12 @@ Project is integrated to Github Actions which will run after each git push.
 
 Project has also docker capabilities.
 
+Run application with:
+```
+mvn spring-boot:run -Dspring-boot.run.arguments=--spring.profiles.active=dev
+```
+
+
 ## Docker commands
 
 Launch Postgres container:
