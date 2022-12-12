@@ -35,7 +35,7 @@ public class PersonServiceImpl implements PersonService {
         Optional<Person> person = personRepository.findById(id);
         PersonDTO originalPersonDTO = new PersonDTO();
         if (person.isPresent()) {
-            originalPersonDTO = DataMapper.convertToDto(person.get());
+            originalPersonDTO = DataMapper.getInstance().convertToDto(person.get());
         } else {
             logger.log(Level.INFO, "Optional<Person> is null!");
         }
@@ -53,7 +53,7 @@ public class PersonServiceImpl implements PersonService {
         logger.info("2");
         for (Person person:persons) {
             logger.info("3");
-            PersonDTO personDTO = DataMapper.convertToDto(person);
+            PersonDTO personDTO = DataMapper.getInstance().convertToDto(person);
             personsDTO.add(personDTO);
         }
         logger.info("4");
@@ -71,7 +71,7 @@ public class PersonServiceImpl implements PersonService {
         List<Person> persons = new ArrayList<Person>();
         personRepository.findByLastname(id).forEach(persons::add);
         for (Person person:persons) {
-            PersonDTO personDTO = DataMapper.convertToDto(person);
+            PersonDTO personDTO = DataMapper.getInstance().convertToDto(person);
             personsDTO.add(personDTO);
         }
         return personsDTO;

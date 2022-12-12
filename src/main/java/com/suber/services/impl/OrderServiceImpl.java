@@ -19,7 +19,7 @@ public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
 
     public OrderDTO save(OrderDTO orderDTO) {
-        Order order = DataMapper.convertToEntity(orderDTO);
+        Order order = DataMapper.getInstance().convertToEntity(orderDTO);
         orderRepository.save(order);
         return orderDTO;
     }
@@ -29,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
         Optional<Order> order = orderRepository.findById(id);
         OrderDTO originalOrderDTO = new OrderDTO();
         if (order.isPresent()) {
-            originalOrderDTO = DataMapper.convertToDto(order.get());
+            originalOrderDTO = DataMapper.getInstance().convertToDto(order.get());
         }
         Optional<OrderDTO> orderDTO= Optional.of(originalOrderDTO);
         return orderDTO;
@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.findAll().forEach(orders::add);
         for (Order order:orders) {
 //            OrderDTO orderDTO = mapper.map(order, OrderDTO.class);
-            OrderDTO orderDTO = DataMapper.convertToDto(order);
+            OrderDTO orderDTO = DataMapper.getInstance().convertToDto(order);
             ordersDTO.add(orderDTO);
         }
         return ordersDTO;
@@ -55,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.findByReference(reference).forEach(orders::add);
         for (Order order:orders) {
             //OrderDTO orderDTO = mapper.map(order, OrderDTO.class);
-            OrderDTO orderDTO = DataMapper.convertToDto(order);
+            OrderDTO orderDTO = DataMapper.getInstance().convertToDto(order);
             ordersDTO.add(orderDTO);
         }
         return ordersDTO;

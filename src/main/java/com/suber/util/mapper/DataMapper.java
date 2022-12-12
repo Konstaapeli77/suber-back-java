@@ -15,21 +15,32 @@ import org.springframework.stereotype.Component;
 import javax.xml.crypto.Data;
 
 @Component
-public class DataMapper {
+public final class DataMapper {
+
+    private static DataMapper INSTANCE;
+
+    public static DataMapper getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new DataMapper();
+        }
+
+        return INSTANCE;
+    }
 
     static Logger logger = LogManager.getLogger(CompanyServiceImpl.class);
 
     @Autowired
-    static ModelMapper mapper;
+//    static ModelMapper mapper;
 
-    @Autowired
-    static ModelMapper mapperClass;
 
-    public DataMapper() {
+    private ModelMapper modelMapper;
 
+    private DataMapper() {
+        modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
     }
 
-    public static Company convertToEntity(CompanyDTO dto) {
+    public Company convertToEntity(CompanyDTO dto) {
         logger.log(Level.INFO, "convertToEntity - start - companyDTO: " + dto);
         logger.log(Level.INFO, "convertToEntity - before");
 
@@ -42,7 +53,7 @@ public class DataMapper {
         return entity;
     }
 
-    public static CompanyDTO convertToDto(Company entity) {
+    public CompanyDTO convertToDto(Company entity) {
 
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
@@ -51,43 +62,43 @@ public class DataMapper {
         return dto;
     }
 
-    public static Order convertToEntity(OrderDTO dto) {
-        Order entity = mapper.map(dto, Order.class);
+    public Order convertToEntity(OrderDTO dto) {
+        Order entity = modelMapper.map(dto, Order.class);
         return entity;
     }
 
-    public static OrderDTO convertToDto(Order entity) {
-        OrderDTO dto = mapper.map(entity, OrderDTO.class);
+    public OrderDTO convertToDto(Order entity) {
+        OrderDTO dto = modelMapper.map(entity, OrderDTO.class);
         return dto;
     }
 
-    public static Service convertToEntity(ServiceDTO dto) {
-        Service entity = mapper.map(dto, Service.class);
+    public Service convertToEntity(ServiceDTO dto) {
+        Service entity = modelMapper.map(dto, Service.class);
         return entity;
     }
 
-    public static ServiceDTO convertToDto(Service entity) {
-        ServiceDTO dto = mapper.map(entity, ServiceDTO.class);
+    public ServiceDTO convertToDto(Service entity) {
+        ServiceDTO dto = modelMapper.map(entity, ServiceDTO.class);
         return dto;
     }
 
-    public static Address convertToEntity(AddressDTO dto) {
-        Address entity = mapper.map(dto, Address.class);
+    public Address convertToEntity(AddressDTO dto) {
+        Address entity = modelMapper.map(dto, Address.class);
         return entity;
     }
 
-    public static AddressDTO convertToDto(Address entity) {
-        AddressDTO dto = mapper.map(entity, AddressDTO.class);
+    public AddressDTO convertToDto(Address entity) {
+        AddressDTO dto = modelMapper.map(entity, AddressDTO.class);
         return dto;
     }
 
-    public static Person convertToEntity(PersonDTO dto) {
-        Person entity = mapper.map(dto, Person.class);
+    public Person convertToEntity(PersonDTO dto) {
+        Person entity = modelMapper.map(dto, Person.class);
         return entity;
     }
 
-    public static PersonDTO convertToDto(Person entity) {
-        PersonDTO dto = mapper.map(entity, PersonDTO.class);
+    public PersonDTO convertToDto(Person entity) {
+        PersonDTO dto = modelMapper.map(entity, PersonDTO.class);
         return dto;
     }
 
