@@ -3,6 +3,7 @@ package com.suber.data;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @Entity
 @Data
 @Builder
+@RequiredArgsConstructor
 @AllArgsConstructor
 @Table(name = "person")
 public class Person {
@@ -26,13 +28,5 @@ public class Person {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private List<Order> orders;
-
-    public Person() {
-    }
-    public Person(String firstname, String lastname) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-    }
-
 
 }

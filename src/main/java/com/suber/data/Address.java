@@ -2,11 +2,13 @@ package com.suber.data;
 
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Data
+@RequiredArgsConstructor
 @Table(name = "address")
 public class Address {
     @Id

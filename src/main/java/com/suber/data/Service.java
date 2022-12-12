@@ -4,6 +4,7 @@ package com.suber.data;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 @Data
 @Builder
+@RequiredArgsConstructor
 @AllArgsConstructor
 @Table(name = "service")
 public class Service {
@@ -27,7 +29,7 @@ public class Service {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private List<Person> workers;
-    @ManyToOne
-    @JoinColumn(name = "company_id", referencedColumnName = "id")
-    private Company company;
+    //@ManyToOne
+    //@JoinColumn(name = "company_id", referencedColumnName = "id")
+    //private Company company;
 }

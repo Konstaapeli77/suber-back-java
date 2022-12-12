@@ -84,7 +84,6 @@ public class DataMapper {
                 .description(service.getDescription())
                 .workers(service.getWorkers())
                 .price(service.getPrice())
-                .company(service.getCompany())
                 .name(service.getName())
                 .build();
     }
@@ -94,7 +93,6 @@ public class DataMapper {
                 .description(service.getDescription())
                 .workers(service.getWorkers())
                 .price(service.getPrice())
-                .company(service.getCompany())
                 .name(service.getName())
                 .build();
     }

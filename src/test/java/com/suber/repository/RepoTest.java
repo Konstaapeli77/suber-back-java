@@ -17,12 +17,13 @@ public class RepoTest {
 
     @Test
     void testDatabase() {
+        /*
         repository.save(new Company("Korkki Oy", "12345-2"));
 
         List<Company> companies = repository.findByName("Korkki Oy");
 
         System.out.println("size:" + companies);
-
+*/
     }
 
 

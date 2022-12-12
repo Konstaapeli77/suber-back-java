@@ -4,6 +4,7 @@ import com.suber.dto.OrderDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 @Data
 @Builder
+@RequiredArgsConstructor
 @AllArgsConstructor
 @Table(name = "orders")
 public class Order {
@@ -25,8 +27,8 @@ public class Order {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
-    @ManyToOne
-    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Person customer;
     @ManyToOne
     @JoinColumn(name = "company_id", referencedColumnName = "id")
@@ -38,8 +40,5 @@ public class Order {
         inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id")
     )
     private List<Service> services;
-
-    public Order() {
-    }
 
 }
