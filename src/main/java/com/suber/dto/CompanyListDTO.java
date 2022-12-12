@@ -2,12 +2,14 @@ package com.suber.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.suber.data.Company;
+import lombok.Builder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompanyListDTO {
+@Builder
+public class
+CompanyListDTO {
     @JsonValue
     private List<CompanyDTO> companies;
 

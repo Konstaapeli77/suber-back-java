@@ -8,16 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Builder
-public class PersonListDTO {
-
+public class OrderListDTO {
     @JsonValue
-    private List<PersonDTO> persons;
+    private List<OrderDTO> orders;
 
-    public PersonListDTO() {
-        persons = new ArrayList<>();
+    public OrderListDTO() {
+        orders = new ArrayList<>();
     }
-    public PersonListDTO(List<PersonDTO> persons) {
-        this.persons = persons;
+    public OrderListDTO(List<OrderDTO> persons) {
+        this.orders = orders;
     }
-
 }

@@ -1,12 +1,10 @@
 package com.suber.services.impl;
 
-import com.suber.data.Company;
 import com.suber.data.Person;
-import com.suber.dto.CompanyDTO;
 import com.suber.dto.PersonDTO;
 import com.suber.repository.PersonRepository;
-import com.suber.services.CompanyService;
 import com.suber.services.PersonService;
+import com.suber.util.mapper.DataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +29,8 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Optional<PersonDTO> findById(long id) {
         Optional<Person> person = personRepository.findById(id);
-        PersonDTO originalPersonDTO = new PersonDTO(person.get().getFirstname(), person.get().getLastname());
+        //PersonDTO originalPersonDTO = mapper.map(person, PersonDTO.class);
+        PersonDTO originalPersonDTO = DataMapper.personToDTO(person.get());
         Optional<PersonDTO> personDTO= Optional.of(originalPersonDTO);
         return personDTO;
     }
@@ -41,21 +40,9 @@ public class PersonServiceImpl implements PersonService {
         List<PersonDTO> personsDTO = new ArrayList<PersonDTO>();
         List<Person> persons = new ArrayList<Person>();
         personRepository.findAll().forEach(persons::add);
-        for (Person company:persons) {
-            PersonDTO companyDTO = new PersonDTO(company.getFirstname(), company.getLastname());
-            personsDTO.add(companyDTO);
-        }
-        return personsDTO;
-    }
-
-    @Override
-    public List<PersonDTO> findByFirstname(String firstname) {
-        List<PersonDTO> personsDTO = new ArrayList<PersonDTO>();
-        List<Person> persons = new ArrayList<Person>();
-        personRepository.findByFirstname(firstname).forEach(persons::add);
         for (Person person:persons) {
-            PersonDTO companyDTO = new PersonDTO(person.getFirstname(), person.getLastname());
-            personsDTO.add(companyDTO);
+            PersonDTO personDTO = DataMapper.personToDTO(person);
+            personsDTO.add(personDTO);
         }
         return personsDTO;
     }
@@ -65,21 +52,13 @@ public class PersonServiceImpl implements PersonService {
         personRepository.deleteById(id);
     }
 
-    /*
-    public Optional<PersonDTO> findByLastname(String lastname) {
-        Optional<PersonDTO> persons = personRepository.findByLastname(lastname);
-        PersonDTO originalCompanyDTO = new PersonDTO(person.get().getFirstname(), person.get().getLastname());
-        Optional<PersonDTO> personDTO= Optional.of(originalCompanyDTO);
-        return personDTO;
-    }
-*/
     @Override
     public List<PersonDTO> findByLastname(String id) {
         List<PersonDTO> personsDTO = new ArrayList<PersonDTO>();
         List<Person> persons = new ArrayList<Person>();
         personRepository.findByLastname(id).forEach(persons::add);
         for (Person person:persons) {
-            PersonDTO personDTO = new PersonDTO(person.getFirstname(), person.getLastname());
+            PersonDTO personDTO = DataMapper.personToDTO(person);
             personsDTO.add(personDTO);
         }
         return personsDTO;

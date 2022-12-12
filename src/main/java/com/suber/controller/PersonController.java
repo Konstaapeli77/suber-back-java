@@ -56,7 +56,7 @@ public class PersonController {
     public ResponseEntity<PersonDTO> createPerson(@RequestBody PersonDTO person) {
         try {
             PersonDTO _person = personService
-                    .save(new PersonDTO(person.getFirstname(), person.getLastname()));
+                    .save(person);
             return new ResponseEntity<>(_person, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
