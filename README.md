@@ -27,8 +27,8 @@ docker run -p 8080:8080 springio/gs-spring-boot-docker
 
 To build and run konstaapeli77 docker use these commands:
 ```
-docker build -t konstaapeli77/app .
-docker run -p 8081:8081 konstaapeli77/app --env ENV=dev
+docker build -t konstaapeli77/suber .
+docker run --env ENV=local -p 8080:8080 konstaapeli77/suber 
 ```
 
 
