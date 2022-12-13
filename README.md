@@ -19,11 +19,6 @@ docker run -p 5432:5432 --name suber-postgres -e POSTGRES_PASSWORD=password -d p
 docker run -p 5432:5432 --name suber-postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=dev -d postgres
 ```
 
-To build and run docker use these commands:
-```
-docker build -t springio/gs-spring-boot-docker .
-docker run -p 8080:8080 springio/gs-spring-boot-docker
-```
 
 To build and run konstaapeli77 docker use these commands:
 ```
@@ -32,8 +27,9 @@ docker run --env ENV=local -p 8080:8080 konstaapeli77/suber
 ```
 
 
-## Docker build
+## Docker push
 
+```
 docker:
   needs: sonar
   name: Push to Docker Hub
@@ -76,15 +72,16 @@ docker:
       with:
         push: true
         tags: user/app:latest
+```
 
 ## Sonar
 
 ```
-sonar:
-  needs: tests
-  name: SonarCloud analysis
-  runs-on: ubuntu-latest
-  steps:
+  sonar:
+    needs: tests
+    name: SonarCloud analysis
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout
         uses: actions/checkout@v2.5.0
 
@@ -113,5 +110,30 @@ sonar:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Konstaapeli77_suber-back-java -Dspring.profiles.active=test
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=Konstaapeli77_suber-back-java -Dspring.profiles.active=test```
+```
+## Deploy jar to Github
+
+```
+  publish:
+    needs: tests
+    name: JAR Publishing to GitHub packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.5.0
+
+      - name: Setup Java
+        uses: actions/setup-java@v3.8.0
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+      - name: Publish package
+        run: mvn --batch-mode deploy -Dspring.profiles.active=test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
