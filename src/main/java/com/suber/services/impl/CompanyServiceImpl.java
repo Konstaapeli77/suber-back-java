@@ -24,11 +24,11 @@ public class CompanyServiceImpl implements CompanyService {
     @Autowired
     CompanyRepository repository;
 
-    @Autowired
-    DataMapper dataMapper;
+//    @Autowired
+//    DataMapper dataMapper;
 
     public CompanyDTO save(CompanyDTO companyDTO) {
-        Company company = dataMapper.convertToEntity(companyDTO);
+        Company company = DataMapper.getInstance().convertToEntity(companyDTO);
         Company company2 = repository.save(company);
         return companyDTO;
     }
@@ -39,7 +39,7 @@ public class CompanyServiceImpl implements CompanyService {
         List<Company> companies = new ArrayList<Company>();
         repository.findAll().forEach(companies::add);
         for (Company company:companies) {
-            CompanyDTO companyDTO = dataMapper.convertToDto(company);
+            CompanyDTO companyDTO = DataMapper.getInstance().convertToDto(company);
             companiesDTO.add(companyDTO);
         }
 
@@ -52,7 +52,7 @@ public class CompanyServiceImpl implements CompanyService {
         List<Company> companies = new ArrayList<Company>();
         repository.findByName(name).forEach(companies::add);
         for (Company company:companies) {
-            CompanyDTO companyDTO = dataMapper.convertToDto(company);
+            CompanyDTO companyDTO = DataMapper.getInstance().convertToDto(company);
             companiesDTO.add(companyDTO);
         }
         return companiesDTO;
@@ -64,7 +64,7 @@ public class CompanyServiceImpl implements CompanyService {
         List<Company> companies = new ArrayList<Company>();
         repository.findByBusinessId(id).forEach(companies::add);
         for (Company company:companies) {
-            CompanyDTO companyDTO = dataMapper.convertToDto(company);
+            CompanyDTO companyDTO = DataMapper.getInstance().convertToDto(company);
             companiesDTO.add(companyDTO);
         }
         return companiesDTO;
@@ -81,7 +81,7 @@ public class CompanyServiceImpl implements CompanyService {
         Optional<Company> company = repository.findById(id);
         CompanyDTO originalCompanyDTO = new CompanyDTO();
         if (company.isPresent()) {
-            originalCompanyDTO = dataMapper.convertToDto(company.get());
+            originalCompanyDTO = DataMapper.getInstance().convertToDto(company.get());
         } else {
             logger.log(Level.INFO, "No value present... again");
         }
