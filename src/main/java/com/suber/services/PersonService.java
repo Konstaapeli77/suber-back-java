@@ -15,6 +15,8 @@ public interface PersonService {
 
     List<PersonDTO> findByLastname(String lastname);
 
+    List<PersonDTO> findByFirstname(String firstname);
+
     void deleteById(long id);
 
     void deleteAll();

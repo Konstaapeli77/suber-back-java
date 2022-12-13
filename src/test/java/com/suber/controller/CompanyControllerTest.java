@@ -1,8 +1,14 @@
 package com.suber.controller;
 
 import com.suber.data.Company;
+import com.suber.dto.CompanyDTO;
+import com.suber.dto.CompanyListDTO;
 import com.suber.repository.CompanyRepository;
+import com.suber.util.TestData;
+import com.suber.util.mapper.DataMapper;
 import org.junit.Assert;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,55 +48,102 @@ class CompanyControllerTest {
 
     @Test
     public void companiesPostShouldSucceed() throws Exception {
-
-        //System.out.println("1");
-        //List<Company> companies = repository.findAll();
-        //System.out.println("2 companies: " + companies);
-
-        /*
         final String baseUrl = "http://localhost:" + port + "/companies/";
         URI uri = new URI(baseUrl);
-        Company company = Company.builder()
+        CompanyDTO company = CompanyDTO.builder()
                 //.id(4)
                 .name("Valio Oy")
-                .address(null)
+                .address(TestData.getAddress())
                 .businessId("123441-1")
-                .orders(null)
-                .services(null)
                 .build();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
-        HttpEntity<Company> request = new HttpEntity<>(company, headers);
-        ResponseEntity<Company> result = this.restTemplate.postForEntity(uri, request, Company.class);
+        HttpEntity<CompanyDTO> request = new HttpEntity<>(company, headers);
+        ResponseEntity<CompanyDTO> result = this.restTemplate.postForEntity(uri, request, CompanyDTO.class);
 
         Assert.assertEquals(201, result.getStatusCodeValue());
-
-         */
-        Assert.assertEquals(1,1);
-
-
     }
-
 
     @Test
     public void companiesGetShouldSucceed() throws Exception {
-        /*
         final String baseUrl = "http://localhost:" + port + "/companies/";
         URI uri = new URI(baseUrl);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
-        ResponseEntity<CompanyList> result = this.restTemplate.getForEntity(uri, CompanyList.class);
+        ResponseEntity<CompanyListDTO> result = this.restTemplate.getForEntity(uri, CompanyListDTO.class);
 
         Assert.assertEquals(200, result.getStatusCodeValue());
-
-         */
-        Assert.assertEquals(1, 1);
     }
 
 
+    @Test
+    void testGetAllCompaniesController() throws Exception {
+
+        final String baseUrl = "http://localhost:" + port + "/companies/";
+        URI uri = new URI(baseUrl);
+        CompanyDTO company = CompanyDTO.builder()
+                //.id(4)
+                .name("Valiotta Oy")
+                .address(TestData.getAddress())
+                .businessId("1233241-1")
+                .build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+
+        HttpEntity<CompanyDTO> request = new HttpEntity<>(company, headers);
+        ResponseEntity<CompanyDTO> result = this.restTemplate.postForEntity(uri, request, CompanyDTO.class);
+
+        ResponseEntity<CompanyListDTO> result2 = controller.getAllCompanies(null);
+        CompanyListDTO list = result2.getBody();
+
+        Assert.assertEquals(1, list.getCompanies().size());
+        Assert.assertEquals(201, result.getStatusCodeValue());
+        Assert.assertEquals(200, result2.getStatusCodeValue());
+    }
+
+
+    @Test
+    void testUpdateCompany() throws Exception {
+
+        CompanyDTO companyDTO = CompanyDTO.builder()
+                .name("Valiotta Oy")
+                .address(TestData.getAddress())
+                .businessId("1233241-1")
+                .build();
+
+        Company companyResultX = repository.save(DataMapper.getInstance().convertToEntity(companyDTO));
+
+        companyDTO.setName("Muutettu!");
+        long id = companyResultX.getId();
+
+        ResponseEntity<CompanyDTO> result2 = controller.updateCompany(id, companyDTO);
+        CompanyDTO companyResult = result2.getBody();
+
+
+        Assert.assertEquals("Muutettu!", companyResult.getName() );
+    }
+
+    @Test
+    void deleteCompany() {
+
+        CompanyDTO companyDTO = CompanyDTO.builder()
+                .name("Sisu Oy")
+                .address(TestData.getAddress())
+                .businessId("333241-4")
+                .build();
+
+        Company companyResultX = repository.save(DataMapper.getInstance().convertToEntity(companyDTO));
+
+        controller.deleteCompany(companyResultX.getId());
+
+        Optional<Company> found = repository.findById(companyResultX.getId());
+
+        Assert.assertFalse(found.isPresent());
+    }
 
 }

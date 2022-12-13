@@ -105,7 +105,7 @@ public class PersonController {
     @GetMapping("/persons/name")
     public ResponseEntity<PersonListDTO> findByFirstname(@PathVariable("firstname") String firstname) {
         try {
-            List<PersonDTO> persons = personService.findByLastname(firstname);
+            List<PersonDTO> persons = personService.findByFirstname(firstname);
 
             if (persons.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);

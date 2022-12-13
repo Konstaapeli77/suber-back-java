@@ -76,6 +76,7 @@ public class CompanyController {
             CompanyDTO _company = companyData.get();
             _company.setName(company.getName());
             _company.setBusinessId(company.getBusinessId());
+            _company.setAddress(company.getAddress());
             return new ResponseEntity<>(companyService.save(_company), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -73,6 +73,18 @@ public class PersonServiceImpl implements PersonService {
         return personsDTO;
     }
 
+    @Override
+    public List<PersonDTO> findByFirstname(String id) {
+        List<PersonDTO> personsDTO = new ArrayList<PersonDTO>();
+        List<Person> persons = new ArrayList<Person>();
+        personRepository.findByFirstname(id).forEach(persons::add);
+        for (Person person:persons) {
+            PersonDTO personDTO = DataMapper.getInstance().convertToDto(person);
+            personsDTO.add(personDTO);
+        }
+        return personsDTO;
+    }
+
     public void deleteAll() {
         personRepository.deleteAll();
     }

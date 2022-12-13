@@ -20,4 +20,6 @@ public class CompanyDTO {
     private long id;
     private String name;
     private String businessId;
+    private Address address;
+
 }

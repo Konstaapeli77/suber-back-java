@@ -13,8 +13,9 @@ import java.util.Optional;
 
 @Entity
 @Data
-//@RequiredArgsConstructor
-//@AllArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "company")
 @RepositoryRestResource(exported = false)
 public class Company {
