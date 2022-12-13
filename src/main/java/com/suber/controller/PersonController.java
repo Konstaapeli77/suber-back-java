@@ -1,6 +1,5 @@
 package com.suber.controller;
 
-import com.suber.data.Person;
 import com.suber.dto.PersonDTO;
 import com.suber.dto.PersonListDTO;
 import com.suber.services.PersonService;
@@ -16,9 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:8080")
 @RestController
-@RequestMapping("/api")
 public class PersonController {
 
     Logger logger = LogManager.getLogger(PersonController.class);

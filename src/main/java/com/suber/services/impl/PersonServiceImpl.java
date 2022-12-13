@@ -46,17 +46,13 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<PersonDTO> findAll() {
-        logger.info("1");
         List<PersonDTO> personsDTO = new ArrayList<PersonDTO>();
         List<Person> persons = new ArrayList<Person>();
         personRepository.findAll().forEach(persons::add);
-        logger.info("2");
         for (Person person:persons) {
-            logger.info("3");
             PersonDTO personDTO = DataMapper.getInstance().convertToDto(person);
             personsDTO.add(personDTO);
         }
-        logger.info("4");
         return personsDTO;
     }
 

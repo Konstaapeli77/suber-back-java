@@ -8,13 +8,10 @@ import com.suber.util.mapper.DataMapper;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,10 +28,8 @@ public class CompanyServiceImpl implements CompanyService {
     DataMapper dataMapper;
 
     public CompanyDTO save(CompanyDTO companyDTO) {
-        logger.log(Level.INFO, "company: " + companyDTO);
         Company company = dataMapper.convertToEntity(companyDTO);
         Company company2 = repository.save(company);
-        logger.log(Level.INFO, "company2: " + company2);
         return companyDTO;
     }
 
@@ -43,7 +38,6 @@ public class CompanyServiceImpl implements CompanyService {
         List<CompanyDTO> companiesDTO = new ArrayList<CompanyDTO>();
         List<Company> companies = new ArrayList<Company>();
         repository.findAll().forEach(companies::add);
-
         for (Company company:companies) {
             CompanyDTO companyDTO = dataMapper.convertToDto(company);
             companiesDTO.add(companyDTO);

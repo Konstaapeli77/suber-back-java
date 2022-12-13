@@ -41,7 +41,6 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = new ArrayList<Order>();
         orderRepository.findAll().forEach(orders::add);
         for (Order order:orders) {
-//            OrderDTO orderDTO = mapper.map(order, OrderDTO.class);
             OrderDTO orderDTO = DataMapper.getInstance().convertToDto(order);
             ordersDTO.add(orderDTO);
         }
@@ -54,7 +53,6 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = new ArrayList<Order>();
         orderRepository.findByReference(reference).forEach(orders::add);
         for (Order order:orders) {
-            //OrderDTO orderDTO = mapper.map(order, OrderDTO.class);
             OrderDTO orderDTO = DataMapper.getInstance().convertToDto(order);
             ordersDTO.add(orderDTO);
         }

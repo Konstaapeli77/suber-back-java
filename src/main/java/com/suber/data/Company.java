@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import java.util.Optional;
 //@RequiredArgsConstructor
 //@AllArgsConstructor
 @Table(name = "company")
+@RepositoryRestResource(exported = false)
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

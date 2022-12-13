@@ -27,3 +27,24 @@ VALUES (2, 'Lumityöt kolalla.', 'Lumityöt kolalla per tunti', 10.00, 1);
 INSERT INTO person (id, firstname, lastname, address_id)
 VALUES (1, 'Matti', 'Vanhanen', 2);
 
+INSERT INTO person (id, firstname, lastname, address_id)
+VALUES (2, 'Vilma', 'Vanhanen', 2);
+
+INSERT INTO person (id, firstname, lastname, address_id)
+VALUES (3, 'Ville', 'Koivu', 3);
+
+INSERT INTO orders (id, price, reference, address_id, customer_id, person_id)
+VALUES (1, 120, '25521', 1, 1, 1);
+
+INSERT INTO orders (id, price, reference, address_id, customer_id, person_id)
+VALUES (2, 210, '123', 1, 1, 1);
+
+INSERT INTO services_orders (service_id, order_id)
+VALUES (1, 1);
+
+INSERT INTO services_orders (service_id, order_id)
+VALUES (2, 1);
+
+INSERT INTO services_orders (service_id, order_id)
+VALUES (2, 2);
+
