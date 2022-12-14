@@ -1,26 +1,25 @@
 package com.suber.services.impl;
 
 import com.suber.data.Company;
-import com.suber.data.Person;
-import com.suber.dto.AddressDTO;
 import com.suber.dto.CompanyDTO;
-import com.suber.dto.PersonDTO;
-import com.suber.exception.ResourceNotFoundException;
+import com.suber.exception.EntityAlreadyExistsException;
+import com.suber.exception.NoSuchEntityException;
 import com.suber.repository.CompanyRepository;
 import com.suber.services.CompanyService;
 import com.suber.util.mapper.DataMapper;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
-@Component
+@Service
 public class CompanyServiceImpl implements CompanyService {
 
     Logger logger = LogManager.getLogger(CompanyServiceImpl.class);
@@ -28,13 +27,19 @@ public class CompanyServiceImpl implements CompanyService {
     @Autowired
     CompanyRepository repository;
 
-//    @Autowired
-//    DataMapper dataMapper;
-
     public CompanyDTO save(CompanyDTO companyDTO) {
-        Company company = DataMapper.getInstance().convertToEntity(companyDTO);
-        Company company2 = repository.save(company);
-        return companyDTO;
+
+        Company existingCompany = repository.findById(companyDTO.getId())
+                .orElse(null);
+
+        if (existingCompany == null) {
+            existingCompany = repository.save(DataMapper.getInstance().convertToEntity(companyDTO));
+        }
+        else
+            throw new EntityAlreadyExistsException(
+                    "Company with id '" + companyDTO.getId() + "' exists!");
+
+        return DataMapper.getInstance().convertToDto(existingCompany);
     }
 
     @Override
@@ -55,6 +60,9 @@ public class CompanyServiceImpl implements CompanyService {
         List<CompanyDTO> companiesDTO = new ArrayList<CompanyDTO>();
         List<Company> companies = new ArrayList<Company>();
         repository.findByName(name).forEach(companies::add);
+        if (companies.size() == 0) {
+            throw new NoSuchEntityException("Company with name '" + name + "' was not found ");
+        }
         for (Company company:companies) {
             CompanyDTO companyDTO = DataMapper.getInstance().convertToDto(company);
             companiesDTO.add(companyDTO);
@@ -62,11 +70,15 @@ public class CompanyServiceImpl implements CompanyService {
         return companiesDTO;
     }
 
+    // TODO => Stream?
     @Override
     public List<CompanyDTO> findByBusinessId(String id) {
         List<CompanyDTO> companiesDTO = new ArrayList<CompanyDTO>();
         List<Company> companies = new ArrayList<Company>();
         repository.findByBusinessId(id).forEach(companies::add);
+        if (companies.size() == 0) {
+            throw new NoSuchEntityException("Company with business id '" + id + "' was not found ");
+        }
         for (Company company:companies) {
             CompanyDTO companyDTO = DataMapper.getInstance().convertToDto(company);
             companiesDTO.add(companyDTO);
@@ -80,41 +92,34 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     // TODO - tarkista tämä
+    @Override
     public Optional<CompanyDTO> findById(long id) {
 
-        Optional<Company> company = repository.findById(id);
-        CompanyDTO originalCompanyDTO = new CompanyDTO();
-        if (company.isPresent()) {
-            originalCompanyDTO = DataMapper.getInstance().convertToDto(company.get());
-        } else {
-            return Optional.empty();
-        }
-        Optional<CompanyDTO> companyDTO= Optional.of(originalCompanyDTO);
+        Company company = repository.findById(id).orElseThrow(
+                () -> new NoSuchEntityException("Company with id '" + id + "' was not found"));
+
+        Optional<CompanyDTO> companyDTO= Optional.of(DataMapper.getInstance().convertToDto(company));
         return companyDTO;
     }
 
     @Override
     public Optional<CompanyDTO> updateCompany(long id, CompanyDTO companyDTO) {
-        Optional<Company> company = repository.findById(id);
+        Company company = repository.findById(id).orElseThrow(
+                () -> new NoSuchEntityException("Company with id '" + id + "' was not found"));
 
-        CompanyDTO result = null;
-        if (company.isPresent()) {
-            Company companyEntity = company.get();
-            companyEntity.setName(companyDTO.getName());
-            companyEntity.setBusinessId(companyDTO.getBusinessId());
+        company.setName(companyDTO.getName());
+        company.setBusinessId(companyDTO.getBusinessId());
 
-            if (companyDTO.getAddress() == null) {
-                companyEntity.setAddress(null);
-            } else {
-                companyEntity.setAddress(DataMapper.getInstance().convertToEntity(companyDTO.getAddress()));
-            }
-            Company updatedCompanyEntity = repository.save(companyEntity);
-            result = DataMapper.getInstance().convertToDto(updatedCompanyEntity);
+        if (companyDTO.getAddress() == null) {
+            company.setAddress(null);
         } else {
-            return Optional.empty();
+            company.setAddress(DataMapper.getInstance().convertToEntity(companyDTO.getAddress()));
         }
+        Company updatedCompanyEntity = repository.save(company);
 
-        Optional<CompanyDTO> companyDTOResult = Optional.of(result);
+        Optional<CompanyDTO> companyDTOResult = Optional.of(
+                DataMapper.getInstance().convertToDto(updatedCompanyEntity));
+
         return companyDTOResult;
     }
 

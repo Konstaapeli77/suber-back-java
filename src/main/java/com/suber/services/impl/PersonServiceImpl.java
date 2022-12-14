@@ -5,20 +5,18 @@ import com.suber.dto.PersonDTO;
 import com.suber.exception.ResourceNotFoundException;
 import com.suber.repository.PersonRepository;
 import com.suber.services.PersonService;
-import lombok.val;
-import org.apache.logging.log4j.Level;
+import com.suber.util.mapper.DataMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.suber.util.mapper.DataMapper;
+import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Service
 public class PersonServiceImpl implements PersonService {
 
     Logger logger = LogManager.getLogger(PersonServiceImpl.class);

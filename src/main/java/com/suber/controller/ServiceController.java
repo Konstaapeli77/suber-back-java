@@ -1,7 +1,5 @@
 package com.suber.controller;
 
-import com.suber.dto.PersonDTO;
-import com.suber.dto.PersonListDTO;
 import com.suber.dto.ServiceDTO;
 import com.suber.dto.ServiceListDTO;
 import com.suber.services.ServiceService;

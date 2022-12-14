@@ -1,14 +1,11 @@
 package com.suber.dto;
 
-import com.suber.data.Company;
-import com.suber.data.Person;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 @Builder

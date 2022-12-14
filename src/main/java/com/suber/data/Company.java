@@ -5,11 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Data

@@ -6,19 +6,15 @@ import com.suber.exception.ResourceNotFoundException;
 import com.suber.repository.ServiceRepository;
 import com.suber.services.ServiceService;
 import com.suber.util.mapper.DataMapper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@org.springframework.stereotype.Service
 public class ServiceServiceImpl implements ServiceService {
 
-    Logger logger = LogManager.getLogger(ServiceServiceImpl.class);
     @Autowired
     ServiceRepository serviceRepository;
 

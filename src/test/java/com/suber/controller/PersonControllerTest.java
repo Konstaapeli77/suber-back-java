@@ -1,8 +1,6 @@
 package com.suber.controller;
 
-import com.suber.data.Company;
 import com.suber.data.Person;
-import com.suber.dto.CompanyDTO;
 import com.suber.dto.PersonDTO;
 import com.suber.dto.PersonListDTO;
 import com.suber.repository.PersonRepository;
@@ -15,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 import java.util.Optional;
 

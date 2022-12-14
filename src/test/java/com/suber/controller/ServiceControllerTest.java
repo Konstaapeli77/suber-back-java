@@ -1,10 +1,8 @@
 package com.suber.controller;
 
 import com.suber.data.Service;
-import com.suber.data.Service;
-import com.suber.dto.ServiceListDTO;
 import com.suber.dto.ServiceDTO;
-import com.suber.repository.ServiceRepository;
+import com.suber.dto.ServiceListDTO;
 import com.suber.repository.ServiceRepository;
 import com.suber.util.TestData;
 import com.suber.util.mapper.DataMapper;
@@ -199,18 +197,9 @@ public class ServiceControllerTest {
 
     @Test
     public void resourceNotFoundResponseSentFromGetServiceById() {
-        // ResponseEntity<>(HttpStatus.NOT_FOUND)
         long missingId = 100000;
         ResponseEntity<ServiceDTO> foundService = controller.getServiceById(missingId);
-
-        // TODO
-        //CompanyDTO dto = null;
-        //DataMapper.getInstance().convertToEntity(dto);
-
-        System.out.println(foundService);
-
         Assert.assertEquals(HttpStatus.NOT_FOUND, foundService.getStatusCode());
-
     }
 
 

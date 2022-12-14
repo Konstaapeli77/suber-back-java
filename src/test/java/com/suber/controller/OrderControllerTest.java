@@ -1,10 +1,8 @@
 package com.suber.controller;
 
-import com.suber.data.Company;
 import com.suber.data.Order;
-import com.suber.data.Person;
-import com.suber.dto.*;
-import com.suber.repository.CompanyRepository;
+import com.suber.dto.OrderDTO;
+import com.suber.dto.OrderListDTO;
 import com.suber.repository.OrderRepository;
 import com.suber.util.TestData;
 import com.suber.util.mapper.DataMapper;

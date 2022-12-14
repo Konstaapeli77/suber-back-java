@@ -1,7 +1,6 @@
 package com.suber.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Builder;
 import lombok.Data;
 

@@ -2,7 +2,6 @@ package com.suber.controller;
 
 import com.suber.dto.CompanyDTO;
 import com.suber.dto.CompanyListDTO;
-import com.suber.dto.PersonDTO;
 import com.suber.services.CompanyService;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -25,15 +24,11 @@ public class CompanyController {
     CompanyService companyService;
 
     @GetMapping("/companies")
-    public ResponseEntity<CompanyListDTO> getAllCompanies(@RequestParam(required = false) String name) {
+    public ResponseEntity<CompanyListDTO> getAllCompanies() {
         try {
             List<CompanyDTO> companies = new ArrayList<CompanyDTO>();
 
-            if (name == null) {
-                companyService.findAll().forEach(companies::add);
-            } else {
-                companyService.findByName(name).forEach(companies::add);
-            }
+            companyService.findAll().forEach(companies::add);
 
             if (companies.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -59,9 +54,7 @@ public class CompanyController {
     @PostMapping("/companies")
     public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO company) {
         try {
-            logger.info("post-1");
             CompanyDTO _company = companyService.save(company);
-            logger.info("post-2");
             return new ResponseEntity<>(_company, HttpStatus.CREATED);
         } catch (Exception e) {
             logger.log(Level.ERROR, "Error in create company: " + e);
@@ -103,16 +96,8 @@ public class CompanyController {
 
     @GetMapping("/companies/name")
     public ResponseEntity<CompanyListDTO> findByName(@PathVariable("name") String name) {
-        try {
-            List<CompanyDTO> companies = companyService.findByName(name);
-
-            if (companies.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(new CompanyListDTO(companies), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        List<CompanyDTO> companies = companyService.findByName(name);
+        return new ResponseEntity<>(new CompanyListDTO(companies), HttpStatus.OK);
     }
 
     @GetMapping("/companies/businessId")

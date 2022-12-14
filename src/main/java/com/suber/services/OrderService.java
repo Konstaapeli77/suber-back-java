@@ -1,6 +1,5 @@
 package com.suber.services;
 
-import com.suber.dto.CompanyDTO;
 import com.suber.dto.OrderDTO;
 
 import java.util.List;

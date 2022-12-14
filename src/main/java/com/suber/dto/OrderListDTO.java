@@ -1,11 +1,9 @@
 package com.suber.dto;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Builder

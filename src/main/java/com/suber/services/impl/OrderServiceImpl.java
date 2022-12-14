@@ -1,21 +1,20 @@
 package com.suber.services.impl;
 
 import com.suber.data.Order;
-import com.suber.data.Person;
 import com.suber.dto.OrderDTO;
-import com.suber.dto.PersonDTO;
 import com.suber.exception.ResourceNotFoundException;
 import com.suber.repository.OrderRepository;
 import com.suber.services.OrderService;
 import com.suber.util.mapper.DataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Service
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
