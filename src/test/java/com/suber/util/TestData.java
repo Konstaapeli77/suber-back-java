@@ -7,6 +7,7 @@ import com.suber.data.Service;
 import com.suber.dto.AddressDTO;
 import com.suber.dto.CompanyDTO;
 import com.suber.dto.OrderDTO;
+import com.suber.dto.ServiceDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -82,6 +83,14 @@ public class TestData {
                 .address(getAddressDTO())
                 .build();
 
+    }
+
+    public static ServiceDTO getServiceDTO() {
+        return ServiceDTO.builder()
+                .price(new BigDecimal(123))
+                .name("Lumitöitä")
+                .description("Short description. Lorem Ipsum. Lorem jne.")
+                .build();
     }
 
 }

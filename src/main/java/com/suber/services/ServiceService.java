@@ -11,9 +11,11 @@ public interface ServiceService {
 
     Optional<ServiceDTO> findById(long id);
 
-    Optional<ServiceDTO> updatePerson(long id, ServiceDTO service);
+    Optional<ServiceDTO> updateService(long id, ServiceDTO service);
 
     List<ServiceDTO> findAll();
+
+    List<ServiceDTO> findByName(String name);
 
     void deleteById(long id);
 

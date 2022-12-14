@@ -278,21 +278,3 @@ public class PersonControllerTest {
     }
 
 }
-/*
-getPersonById
-
-    PersonDTO save(PersonDTO personDTO);
-
-    Optional<PersonDTO> findById(long id);
-
-    List<PersonDTO> findAll();
-
-    List<PersonDTO> findByLastname(String lastname);
-
-    List<PersonDTO> findByFirstname(String firstname);
-
-    void deleteById(long id);
-
-    void deleteAll();
-
- */

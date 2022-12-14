@@ -29,7 +29,11 @@ To build and run konstaapeli77 docker use these commands:
 ``` 
 docker run --env ENV=local -p 8080:8080 konstaapeli77/suber 
 ```
+## Maven tests with Jacoco coverage
 
+``` 
+mvn test -Dspring.profiles.active=test -f pom.xml
+``` 
 
 ## Docker push
 
