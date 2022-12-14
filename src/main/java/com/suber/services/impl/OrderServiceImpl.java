@@ -1,7 +1,10 @@
 package com.suber.services.impl;
 
 import com.suber.data.Order;
+import com.suber.data.Person;
 import com.suber.dto.OrderDTO;
+import com.suber.dto.PersonDTO;
+import com.suber.exception.ResourceNotFoundException;
 import com.suber.repository.OrderRepository;
 import com.suber.services.OrderService;
 import com.suber.util.mapper.DataMapper;
@@ -30,8 +33,34 @@ public class OrderServiceImpl implements OrderService {
         OrderDTO originalOrderDTO = new OrderDTO();
         if (order.isPresent()) {
             originalOrderDTO = DataMapper.getInstance().convertToDto(order.get());
+        } else {
+            return Optional.empty();
         }
         Optional<OrderDTO> orderDTO= Optional.of(originalOrderDTO);
+        return orderDTO;
+    }
+
+    @Override
+    public Optional<OrderDTO> updateOrder(long id, OrderDTO updatedOrder) throws ResourceNotFoundException {
+        Optional<Order> order = orderRepository.findById(id);
+
+        OrderDTO result = null;
+        if (order.isPresent()) {
+            Order orderEntity = order.get();
+            orderEntity.setPrice(updatedOrder.getPrice());
+            orderEntity.setReference(updatedOrder.getReference());
+            if (updatedOrder.getAddress() == null) {
+                orderEntity.setAddress(null);
+            } else {
+                orderEntity.setAddress(DataMapper.getInstance().convertToEntity(updatedOrder.getAddress()));
+            }
+            Order updatedOrderEntity = orderRepository.save(orderEntity);
+            result = DataMapper.getInstance().convertToDto(updatedOrderEntity);
+        } else {
+            return Optional.empty();
+        }
+
+        Optional<OrderDTO> orderDTO= Optional.of(result);
         return orderDTO;
     }
 

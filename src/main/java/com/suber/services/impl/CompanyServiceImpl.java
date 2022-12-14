@@ -1,7 +1,11 @@
 package com.suber.services.impl;
 
 import com.suber.data.Company;
+import com.suber.data.Person;
+import com.suber.dto.AddressDTO;
 import com.suber.dto.CompanyDTO;
+import com.suber.dto.PersonDTO;
+import com.suber.exception.ResourceNotFoundException;
 import com.suber.repository.CompanyRepository;
 import com.suber.services.CompanyService;
 import com.suber.util.mapper.DataMapper;
@@ -83,10 +87,35 @@ public class CompanyServiceImpl implements CompanyService {
         if (company.isPresent()) {
             originalCompanyDTO = DataMapper.getInstance().convertToDto(company.get());
         } else {
-            logger.log(Level.INFO, "No value present... again");
+            return Optional.empty();
         }
         Optional<CompanyDTO> companyDTO= Optional.of(originalCompanyDTO);
         return companyDTO;
+    }
+
+    @Override
+    public Optional<CompanyDTO> updateCompany(long id, CompanyDTO companyDTO) {
+        Optional<Company> company = repository.findById(id);
+
+        CompanyDTO result = null;
+        if (company.isPresent()) {
+            Company companyEntity = company.get();
+            companyEntity.setName(companyDTO.getName());
+            companyEntity.setBusinessId(companyDTO.getBusinessId());
+
+            if (companyDTO.getAddress() == null) {
+                companyEntity.setAddress(null);
+            } else {
+                companyEntity.setAddress(DataMapper.getInstance().convertToEntity(companyDTO.getAddress()));
+            }
+            Company updatedCompanyEntity = repository.save(companyEntity);
+            result = DataMapper.getInstance().convertToDto(updatedCompanyEntity);
+        } else {
+            return Optional.empty();
+        }
+
+        Optional<CompanyDTO> companyDTOResult = Optional.of(result);
+        return companyDTOResult;
     }
 
     public void deleteAll() {

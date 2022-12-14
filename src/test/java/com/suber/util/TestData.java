@@ -4,6 +4,9 @@ import com.suber.data.Address;
 import com.suber.data.Company;
 import com.suber.data.Order;
 import com.suber.data.Service;
+import com.suber.dto.AddressDTO;
+import com.suber.dto.CompanyDTO;
+import com.suber.dto.OrderDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,6 +15,14 @@ public class TestData {
 
     public static Address getAddress() {
         return Address.builder()
+                .city("Helsinki")
+                .address("Lummetie 1 A")
+                .postalCode("10100")
+                .build();
+    }
+
+    public static AddressDTO getAddressDTO() {
+        return AddressDTO.builder()
                 .city("Helsinki")
                 .address("Lummetie 1 A")
                 .postalCode("10100")
@@ -42,8 +53,7 @@ public class TestData {
     }
 
     public static Company getCompany() {
-        return null;
-        /*
+
         return Company.builder()
                 .orders(getOrder())
                 .services(getService())
@@ -52,6 +62,26 @@ public class TestData {
                 .address(getAddress())
                 .build();
 
-         */
     }
+
+    public static CompanyDTO getCompanyDTO() {
+
+        return CompanyDTO.builder()
+                .name("Valtor Oy")
+                .businessId("12314-1")
+                .address(getAddressDTO())
+                .build();
+
+    }
+
+    public static OrderDTO getOrderDTO() {
+
+        return OrderDTO.builder()
+                .reference("3423")
+                .price(new BigDecimal(12))
+                .address(getAddressDTO())
+                .build();
+
+    }
+
 }

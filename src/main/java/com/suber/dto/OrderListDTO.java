@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Builder
@@ -18,5 +19,9 @@ public class OrderListDTO {
     public OrderListDTO(List<OrderDTO> orders) {
 
         this.orders = orders;
+    }
+
+    public List<OrderDTO> getOrders() {
+        return orders;
     }
 }

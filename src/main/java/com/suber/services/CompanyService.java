@@ -11,6 +11,8 @@ public interface CompanyService {
 
     Optional<CompanyDTO> findById(long id);
 
+    Optional<CompanyDTO> updateCompany(long id, CompanyDTO companyDTO);
+
     List<CompanyDTO> findAll();
 
     List<CompanyDTO> findByName(String name);

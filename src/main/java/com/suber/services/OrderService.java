@@ -1,5 +1,6 @@
 package com.suber.services;
 
+import com.suber.dto.CompanyDTO;
 import com.suber.dto.OrderDTO;
 
 import java.util.List;
@@ -10,6 +11,8 @@ public interface OrderService {
     OrderDTO save(OrderDTO orderDTO);
 
     Optional<OrderDTO> findById(long id);
+
+    Optional<OrderDTO> updateOrder(long id, OrderDTO orderDTO);
 
     List<OrderDTO> findAll();
 

@@ -2,6 +2,7 @@ package com.suber.controller;
 
 import com.suber.dto.CompanyDTO;
 import com.suber.dto.CompanyListDTO;
+import com.suber.dto.PersonDTO;
 import com.suber.services.CompanyService;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -70,14 +71,10 @@ public class CompanyController {
 
     @PutMapping("/companies/{id}")
     public ResponseEntity<CompanyDTO> updateCompany(@PathVariable("id") long id, @RequestBody CompanyDTO company) {
-        Optional<CompanyDTO> companyData = companyService.findById(id);
+        Optional<CompanyDTO> companyData = companyService.updateCompany(id, company);
 
         if (companyData.isPresent()) {
-            CompanyDTO _company = companyData.get();
-            _company.setName(company.getName());
-            _company.setBusinessId(company.getBusinessId());
-            _company.setAddress(company.getAddress());
-            return new ResponseEntity<>(companyService.save(_company), HttpStatus.OK);
+            return new ResponseEntity<>(companyData.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

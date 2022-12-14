@@ -95,6 +95,23 @@ public class PersonControllerTest {
     }
 
     @Test
+    void personShouldNotBeFoundWithFirstnameAndReturnedSuccess() {
+
+        PersonDTO personDTO = PersonDTO.builder()
+                .firstname("Sanna")
+                .lastname("Marin")
+                .build();
+
+        Person savedPerson = repository.save(DataMapper.getInstance().convertToEntity(personDTO));
+
+        ResponseEntity<PersonListDTO> personsWithThatName = controller.findByFirstname("Jaakko");
+        PersonListDTO list = personsWithThatName.getBody();
+
+        Assert.assertTrue(list == null);
+        Assert.assertEquals(HttpStatus.NO_CONTENT, personsWithThatName.getStatusCode());
+    }
+
+    @Test
     void personShouldBeFoundWithLastnameAndReturnedSuccess() {
 
         PersonDTO personDTO = PersonDTO.builder()
@@ -110,6 +127,26 @@ public class PersonControllerTest {
         Assert.assertTrue(list.getPersons().size() == 1);
         Assert.assertTrue(list.getPersons().get(0).getLastname().equals("Marin"));
         Assert.assertEquals(HttpStatus.OK, personsWithThatName.getStatusCode());
+    }
+
+    @Test
+    void personWithAddressShouldBeUpdatedAndReturnedSuccess() {
+
+        PersonDTO personDTO = PersonDTO.builder()
+                .firstname("Sanna")
+                .lastname("Marin")
+                .address(TestData.getAddressDTO())
+                .build();
+
+        Person savedPerson = repository.save(DataMapper.getInstance().convertToEntity(personDTO));
+        savedPerson.setLastname("Väliaho");
+
+        PersonDTO personDTOFromPerson = DataMapper.getInstance().convertToDto(savedPerson);
+        ResponseEntity<PersonDTO> updatedPerson =
+                controller.updatePerson(savedPerson.getId(), personDTOFromPerson);
+
+        Assert.assertEquals(HttpStatus.OK, updatedPerson.getStatusCode());
+        Assert.assertTrue(updatedPerson.getBody().getLastname().equals("Väliaho"));
     }
 
     @Test
@@ -129,6 +166,26 @@ public class PersonControllerTest {
 
         Assert.assertEquals(HttpStatus.OK, updatedPerson.getStatusCode());
         Assert.assertTrue(updatedPerson.getBody().getLastname().equals("Väliaho"));
+    }
+
+    @Test
+    void personShouldNotBeUpdatedAndReturnFailed() {
+
+        long wrongId = 10000;
+        PersonDTO personDTO = PersonDTO.builder()
+                .firstname("Sanna")
+                .lastname("Marin")
+                .build();
+
+        Person savedPerson = repository.save(DataMapper.getInstance().convertToEntity(personDTO));
+        savedPerson.setLastname("Väliaho");
+
+        PersonDTO personDTOFromPerson = DataMapper.getInstance().convertToDto(savedPerson);
+        ResponseEntity<PersonDTO> updatedPerson =
+                controller.updatePerson(wrongId, personDTOFromPerson);
+
+        Assert.assertEquals(HttpStatus.NOT_FOUND, updatedPerson.getStatusCode());
+        Assert.assertTrue(updatedPerson.getBody() == null);
     }
 
     @Test

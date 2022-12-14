@@ -61,7 +61,7 @@ public class PersonServiceImpl implements PersonService {
                 personEntity.setAddress(DataMapper.getInstance().convertToEntity(updatedPerson.getAddress()));
             }
             Person updatedPersonEntity = personRepository.save(personEntity);
-             result = DataMapper.getInstance().convertToDto(updatedPersonEntity);
+            result = DataMapper.getInstance().convertToDto(updatedPersonEntity);
         } else {
             return Optional.empty();
         }

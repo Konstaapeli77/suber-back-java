@@ -19,20 +19,16 @@ public class OrderController {
     OrderService orderService;
 
     @GetMapping("/orders")
-    public ResponseEntity<OrderListDTO> getAllOrders(@RequestParam(required = false) String reference) {
+    public ResponseEntity<OrderListDTO> getAllOrders() {
         try {
             List<OrderDTO> orders = new ArrayList<OrderDTO>();
 
-            if (reference == null)
-                orderService.findAll().forEach(orders::add);
-            else
-                orderService.findByReference(reference).forEach(orders::add);
+            orderService.findAll().forEach(orders::add);
 
             if (orders.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            //return new ResponseEntity<>(orders, HttpStatus.OK);
             return new ResponseEntity<>(new OrderListDTO(orders), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -51,7 +47,7 @@ public class OrderController {
     }
 
     @PostMapping("/orders")
-    public ResponseEntity<OrderDTO> createCompany(@RequestBody OrderDTO order) {
+    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO order) {
         try {
             OrderDTO _order = orderService
                     .save(order);
@@ -62,11 +58,11 @@ public class OrderController {
     }
 
     @PutMapping("/orders/{id}")
-    public ResponseEntity<OrderDTO> updateCompany(@PathVariable("id") long id, @RequestBody OrderDTO order) {
-        Optional<OrderDTO> orderData = orderService.findById(id);
+    public ResponseEntity<OrderDTO> updateOrder(@PathVariable("id") long id, @RequestBody OrderDTO order) {
+        Optional<OrderDTO> orderData = orderService.updateOrder(id, order);
 
         if (orderData.isPresent()) {
-            return new ResponseEntity<>(orderService.save(order), HttpStatus.OK);
+            return new ResponseEntity<>(orderData.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -94,7 +90,7 @@ public class OrderController {
     }
 
     @GetMapping("/orders/name")
-    public ResponseEntity<OrderListDTO> findByName(@PathVariable("reference") String reference) {
+    public ResponseEntity<OrderListDTO> findByReference(@PathVariable("reference") String reference) {
         try {
             List<OrderDTO> orders = orderService.findByReference(reference);
 

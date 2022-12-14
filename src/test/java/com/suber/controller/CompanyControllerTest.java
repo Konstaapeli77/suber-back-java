@@ -1,8 +1,10 @@
 package com.suber.controller;
 
 import com.suber.data.Company;
+import com.suber.data.Person;
 import com.suber.dto.CompanyDTO;
 import com.suber.dto.CompanyListDTO;
+import com.suber.dto.PersonDTO;
 import com.suber.repository.CompanyRepository;
 import com.suber.util.TestData;
 import com.suber.util.mapper.DataMapper;
@@ -18,6 +20,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
@@ -53,7 +56,7 @@ class CompanyControllerTest {
         CompanyDTO company = CompanyDTO.builder()
                 //.id(4)
                 .name("Valio Oy")
-                .address(TestData.getAddress())
+                .address(TestData.getAddressDTO())
                 .businessId("123441-1")
                 .build();
 
@@ -88,7 +91,7 @@ class CompanyControllerTest {
         CompanyDTO company = CompanyDTO.builder()
                 //.id(4)
                 .name("Valiotta Oy")
-                .address(TestData.getAddress())
+                .address(TestData.getAddressDTO())
                 .businessId("1233241-1")
                 .build();
 
@@ -101,31 +104,24 @@ class CompanyControllerTest {
         ResponseEntity<CompanyListDTO> result2 = controller.getAllCompanies(null);
         CompanyListDTO list = result2.getBody();
 
-        Assert.assertEquals(1, list.getCompanies().size());
+        Assert.assertTrue(list.getCompanies().size() > 0);
         Assert.assertEquals(201, result.getStatusCodeValue());
         Assert.assertEquals(200, result2.getStatusCodeValue());
     }
 
 
     @Test
-    void testUpdateCompany() throws Exception {
+    void companyShouldBeUpdatedAndReturnedSuccess() {
 
-        CompanyDTO companyDTO = CompanyDTO.builder()
-                .name("Valiotta Oy")
-                .address(TestData.getAddress())
-                .businessId("1233241-1")
-                .build();
+        Company savedCompany = repository.save(DataMapper.getInstance().convertToEntity(TestData.getCompanyDTO()));
+        savedCompany.setName("Väliaho");
 
-        Company companyResultX = repository.save(DataMapper.getInstance().convertToEntity(companyDTO));
+        CompanyDTO companyDTOFromCompany = DataMapper.getInstance().convertToDto(savedCompany);
+        ResponseEntity<CompanyDTO> updatedCompany =
+                controller.updateCompany(savedCompany.getId(), companyDTOFromCompany);
 
-        companyDTO.setName("Muutettu!");
-        long id = companyResultX.getId();
-
-        ResponseEntity<CompanyDTO> result2 = controller.updateCompany(id, companyDTO);
-        CompanyDTO companyResult = result2.getBody();
-
-
-        Assert.assertEquals("Muutettu!", companyResult.getName() );
+        Assert.assertEquals(HttpStatus.OK, updatedCompany.getStatusCode());
+        Assert.assertTrue(updatedCompany.getBody().getName().equals("Väliaho"));
     }
 
     @Test
@@ -133,7 +129,7 @@ class CompanyControllerTest {
 
         CompanyDTO companyDTO = CompanyDTO.builder()
                 .name("Sisu Oy")
-                .address(TestData.getAddress())
+                .address(TestData.getAddressDTO())
                 .businessId("333241-4")
                 .build();
 
