@@ -11,6 +11,8 @@ public interface PersonService {
 
     Optional<PersonDTO> findById(long id);
 
+    Optional<PersonDTO> updatePerson(long id, PersonDTO person);
+
     List<PersonDTO> findAll();
 
     List<PersonDTO> findByLastname(String lastname);

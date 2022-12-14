@@ -16,7 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import javax.xml.crypto.Data;
+import java.util.List;
 import java.util.Optional;
+
+import static org.junit.Assert.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PersonControllerTest {
@@ -28,7 +31,7 @@ public class PersonControllerTest {
     PersonRepository repository;
 
     @Test
-    void deletePerson() {
+    void personShouldBeDeletedAndReturnedSuccess() {
 
         PersonDTO personDTO = PersonDTO.builder()
                 .firstname("Sanna")
@@ -36,16 +39,45 @@ public class PersonControllerTest {
                 .build();
 
         Person savedPerson = repository.save(DataMapper.getInstance().convertToEntity(personDTO));
+
         ResponseEntity<HttpStatus> status = controller.deletePerson(savedPerson.getId());
 
         Optional<Person> found = repository.findById(savedPerson.getId());
 
         Assert.assertFalse(found.isPresent());
-        Assert.assertEquals(204, status.getStatusCodeValue());
+        Assert.assertEquals(HttpStatus.NO_CONTENT, status.getStatusCode());
     }
 
     @Test
-    void getPerson() {
+    void allPersonsShouldBeDeletedAndReturnedSuccess() {
+
+        PersonDTO personDTO = PersonDTO.builder()
+                .firstname("Sanna")
+                .lastname("Marin")
+                .build();
+
+        PersonDTO person2DTO = PersonDTO.builder()
+                .firstname("Valtteri")
+                .lastname("Virtanen")
+                .build();
+
+        Person savedPerson = repository.save(DataMapper.getInstance().convertToEntity(personDTO));
+        Person savedPerson2 = repository.save(DataMapper.getInstance().convertToEntity(person2DTO));
+        List<Person> found = repository.findAll();
+        System.out.println("size: " + found.size());
+
+        ResponseEntity<HttpStatus> status = controller.deleteAllPersons();
+
+        List<Person> foundDeleted = repository.findAll();
+        System.out.println("size: " + foundDeleted.size());
+
+        Assert.assertTrue(found.size() > 0);
+        Assert.assertEquals(0, foundDeleted.size());
+        Assert.assertEquals(HttpStatus.NO_CONTENT, status.getStatusCode());
+    }
+
+    @Test
+    void personShouldBeFoundWithFirstnameAndReturnedSuccess() {
 
         PersonDTO personDTO = PersonDTO.builder()
                 .firstname("Sanna")
@@ -59,11 +91,29 @@ public class PersonControllerTest {
 
         Assert.assertTrue(list.getPersons().size() > 0);
         Assert.assertTrue(list.getPersons().get(0).getFirstname().equals("Sanna"));
-        Assert.assertEquals(200, personsWithThatName.getStatusCodeValue());
+        Assert.assertEquals(HttpStatus.OK, personsWithThatName.getStatusCode());
     }
 
     @Test
-    void updatePerson() {
+    void personShouldBeFoundWithLastnameAndReturnedSuccess() {
+
+        PersonDTO personDTO = PersonDTO.builder()
+                .firstname("Sanna")
+                .lastname("Marin")
+                .build();
+
+        Person savedPerson = repository.save(DataMapper.getInstance().convertToEntity(personDTO));
+
+        ResponseEntity<PersonListDTO> personsWithThatName = controller.findByLastname("Marin");
+        PersonListDTO list = personsWithThatName.getBody();
+
+        Assert.assertTrue(list.getPersons().size() == 1);
+        Assert.assertTrue(list.getPersons().get(0).getLastname().equals("Marin"));
+        Assert.assertEquals(HttpStatus.OK, personsWithThatName.getStatusCode());
+    }
+
+    @Test
+    void personShouldBeUpdatedAndReturnedSuccess() {
 
         PersonDTO personDTO = PersonDTO.builder()
                 .firstname("Sanna")
@@ -73,13 +123,119 @@ public class PersonControllerTest {
         Person savedPerson = repository.save(DataMapper.getInstance().convertToEntity(personDTO));
         savedPerson.setLastname("Väliaho");
 
+        PersonDTO personDTOFromPerson = DataMapper.getInstance().convertToDto(savedPerson);
         ResponseEntity<PersonDTO> updatedPerson =
-                controller.updatePerson(savedPerson.getId(), DataMapper.getInstance().convertToDto(savedPerson));
+                controller.updatePerson(savedPerson.getId(), personDTOFromPerson);
 
-
-
-        Assert.assertEquals(200, updatedPerson.getStatusCodeValue());
+        Assert.assertEquals(HttpStatus.OK, updatedPerson.getStatusCode());
         Assert.assertTrue(updatedPerson.getBody().getLastname().equals("Väliaho"));
     }
 
+    @Test
+    void getAllPersonAndReturnedSuccess() {
+        PersonDTO personDTO = PersonDTO.builder()
+                .firstname("Sanna")
+                .lastname("Marin")
+                .build();
+
+        PersonDTO person2DTO = PersonDTO.builder()
+                .firstname("Valtteri")
+                .lastname("Virtanen")
+                .build();
+
+        Person savedPerson = repository.save(DataMapper.getInstance().convertToEntity(personDTO));
+        Person savedPerson2 = repository.save(DataMapper.getInstance().convertToEntity(person2DTO));
+        List<Person> found = repository.findAll();
+        System.out.println("size: " + found.size());
+
+        ResponseEntity<PersonListDTO> listOfPersons = controller.getAllPersons();
+        System.out.println("size: " + listOfPersons.getBody().getPersons().size());
+
+        Assert.assertEquals(HttpStatus.OK, listOfPersons.getStatusCode());
+        Assert.assertTrue(listOfPersons.getBody().getPersons().size() > 0);
+
+    }
+
+    @Test
+    void createPersonAndReturnedSuccess() {
+        PersonDTO personDTO = PersonDTO.builder()
+                .firstname("Sanna")
+                .lastname("Marin")
+                .build();
+
+        //Person savedPerson = repository.save(DataMapper.getInstance().convertToEntity(personDTO));
+
+        ResponseEntity<PersonDTO> createdPerson = controller.createPerson(personDTO);
+        System.out.println(createdPerson);
+        Optional<Person> savedPerson = repository.findById(createdPerson.getBody().getId());
+
+
+        Assert.assertTrue(savedPerson.isPresent());
+        Assert.assertEquals(HttpStatus.CREATED, createdPerson.getStatusCode());
+
+    }
+
+    @Test
+    void getPersonByIdAndReturnedSuccess() {
+        PersonDTO personDTO = PersonDTO.builder()
+                .firstname("Sanna")
+                .lastname("Marin")
+                .build();
+
+        Person savedPerson = repository.save(DataMapper.getInstance().convertToEntity(personDTO));
+
+        ResponseEntity<PersonDTO> foundPerson = controller.getPersonById(savedPerson.getId());
+        System.out.println(foundPerson);
+
+        Assert.assertEquals(savedPerson.getId(), foundPerson.getBody().getId());
+        Assert.assertEquals(HttpStatus.OK, foundPerson.getStatusCode());
+
+    }
+
+    @Test
+    public void exceptionThrownFromGetPersonById() {
+        Exception exception = assertThrows(NumberFormatException.class, () -> {
+            Integer.parseInt("1a");
+        });
+
+        String expectedMessage = "For input string";
+        String actualMessage = exception.getMessage();
+
+        Assert.assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    public void resourceNotFoundResponseSentFromGetPersonById() {
+        // ResponseEntity<>(HttpStatus.NOT_FOUND)
+        long missingId = 100000;
+        ResponseEntity<PersonDTO> foundPerson = controller.getPersonById(missingId);
+
+        // TODO
+        //CompanyDTO dto = null;
+        //DataMapper.getInstance().convertToEntity(dto);
+
+        System.out.println(foundPerson);
+
+        Assert.assertEquals(HttpStatus.NOT_FOUND, foundPerson.getStatusCode());
+
+    }
+
 }
+/*
+getPersonById
+
+    PersonDTO save(PersonDTO personDTO);
+
+    Optional<PersonDTO> findById(long id);
+
+    List<PersonDTO> findAll();
+
+    List<PersonDTO> findByLastname(String lastname);
+
+    List<PersonDTO> findByFirstname(String firstname);
+
+    void deleteById(long id);
+
+    void deleteAll();
+
+ */

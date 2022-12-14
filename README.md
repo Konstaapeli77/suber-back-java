@@ -9,7 +9,12 @@ Run application with:
 ```
 mvn spring-boot:run -Dspring-boot.run.arguments=--spring.profiles.active=dev
 ```
+## Environment variables
 
+- **dev** development time usage (uses postgres dev-database)
+- **prod** usage inside docker-compose and in production (uses postgres prod-database)
+- **local** ment for conainer-only usage (uses H2 database)
+- **tests** ment for development time testing purposes (uses H2 database)
 
 ## Docker commands
 
@@ -21,8 +26,7 @@ docker run -p 5432:5432 --name suber-postgres -e POSTGRES_PASSWORD=password -e P
 
 
 To build and run konstaapeli77 docker use these commands:
-```
-docker build -t konstaapeli77/suber .
+``` 
 docker run --env ENV=local -p 8080:8080 konstaapeli77/suber 
 ```
 

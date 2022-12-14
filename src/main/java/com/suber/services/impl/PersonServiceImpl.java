@@ -2,8 +2,10 @@ package com.suber.services.impl;
 
 import com.suber.data.Person;
 import com.suber.dto.PersonDTO;
+import com.suber.exception.ResourceNotFoundException;
 import com.suber.repository.PersonRepository;
 import com.suber.services.PersonService;
+import lombok.val;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.suber.util.mapper.DataMapper;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,22 +28,45 @@ public class PersonServiceImpl implements PersonService {
     public PersonDTO save(PersonDTO personDto) {
         Person person = new Person();
         person.setFirstname(personDto.getFirstname());
-        person.setFirstname(personDto.getLastname());
-        personRepository.save(person);
-        return personDto;
+        person.setLastname(personDto.getLastname());
+        return DataMapper.getInstance().convertToDto(personRepository.save(person));
     }
 
     @Override
-    public Optional<PersonDTO> findById(long id) {
+    public Optional<PersonDTO> findById(long id) throws ResourceNotFoundException {
         Optional<Person> person = personRepository.findById(id);
-        PersonDTO originalPersonDTO = new PersonDTO();
+        PersonDTO originalPersonDTO = null;
         if (person.isPresent()) {
             originalPersonDTO = DataMapper.getInstance().convertToDto(person.get());
         } else {
-            logger.log(Level.INFO, "Optional<Person> is null!");
+            return Optional.empty();
         }
 
         Optional<PersonDTO> personDTO= Optional.of(originalPersonDTO);
+        return personDTO;
+    }
+
+    @Override
+    public Optional<PersonDTO> updatePerson(long id, PersonDTO updatedPerson) throws ResourceNotFoundException {
+        Optional<Person> person = personRepository.findById(id);
+
+        PersonDTO result = null;
+        if (person.isPresent()) {
+            Person personEntity = person.get();
+            personEntity.setFirstname(updatedPerson.getFirstname());
+            personEntity.setLastname(updatedPerson.getLastname());
+            if (updatedPerson.getAddress() == null) {
+                personEntity.setAddress(null);
+            } else {
+                personEntity.setAddress(DataMapper.getInstance().convertToEntity(updatedPerson.getAddress()));
+            }
+            Person updatedPersonEntity = personRepository.save(personEntity);
+             result = DataMapper.getInstance().convertToDto(updatedPersonEntity);
+        } else {
+            return Optional.empty();
+        }
+
+        Optional<PersonDTO> personDTO= Optional.of(result);
         return personDTO;
     }
 

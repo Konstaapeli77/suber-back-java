@@ -24,14 +24,11 @@ public class PersonController {
     PersonService personService;
 
     @GetMapping("/persons")
-    public ResponseEntity<PersonListDTO> getAllPersons(@RequestParam(required = false) String lastname) {
+    public ResponseEntity<PersonListDTO> getAllPersons() {
         try {
             List<PersonDTO> persons = new ArrayList<PersonDTO>();
 
-            if (lastname == null)
-                personService.findAll().forEach(persons::add);
-            else
-                personService.findByLastname(lastname).forEach(persons::add);
+            personService.findAll().forEach(persons::add);
 
             if (persons.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -47,6 +44,7 @@ public class PersonController {
 
     @GetMapping("/persons/{id}")
     public ResponseEntity<PersonDTO> getPersonById(@PathVariable("id") long id) {
+
         Optional<PersonDTO> personData = personService.findById(id);
 
         if (personData.isPresent()) {
@@ -69,13 +67,11 @@ public class PersonController {
 
     @PutMapping("/persons/{id}")
     public ResponseEntity<PersonDTO> updatePerson(@PathVariable("id") long id, @RequestBody PersonDTO person) {
-        Optional<PersonDTO> personData = personService.findById(id);
+
+        Optional<PersonDTO> personData = personService.updatePerson(id, person);
 
         if (personData.isPresent()) {
-            PersonDTO _person = personData.get();
-            _person.setFirstname(person.getFirstname());
-            _person.setLastname(person.getLastname());
-            return new ResponseEntity<>(personService.save(_person), HttpStatus.OK);
+            return new ResponseEntity<>(personData.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
