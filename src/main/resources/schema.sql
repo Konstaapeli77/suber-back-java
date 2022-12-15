@@ -17,7 +17,7 @@ CREATE SEQUENCE public.hibernate_sequence
 -- DROP TABLE public.address;
 
 CREATE TABLE public.address (
-	id int8 NOT NULL,
+	id SERIAL NOT NULL,
 	address varchar(255) NULL,
 	city varchar(255) NULL,
 	postal_code varchar(255) NULL,
@@ -32,7 +32,7 @@ CREATE TABLE public.address (
 -- DROP TABLE public.company;
 
 CREATE TABLE public.company (
-	id int8 NOT NULL,
+	id SERIAL NOT NULL,
 	business_id varchar(255) NULL,
 	"name" varchar(255) NULL,
 	address_id int8 NULL,
@@ -48,7 +48,7 @@ CREATE TABLE public.company (
 -- DROP TABLE public.service;
 
 CREATE TABLE public.service (
-	id int8 NOT NULL,
+	id SERIAL NOT NULL,
 	description varchar(255) NULL,
 	"name" varchar(255) NULL,
 	price numeric(19, 2) NULL,
@@ -65,7 +65,7 @@ CREATE TABLE public.service (
 -- DROP TABLE public.person;
 
 CREATE TABLE public.person (
-	id int8 NOT NULL,
+	id SERIAL NOT NULL,
 	firstname varchar(255) NULL,
 	lastname varchar(255) NULL,
 	address_id int8 NULL,
@@ -83,7 +83,7 @@ CREATE TABLE public.person (
 -- DROP TABLE public.orders;
 
 CREATE TABLE public.orders (
-	id int8 NOT NULL,
+	id SERIAL NOT NULL,
 	price numeric(19, 2) NULL,
 	reference varchar(255) NULL,
 	address_id int8 NULL,

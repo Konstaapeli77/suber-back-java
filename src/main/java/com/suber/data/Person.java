@@ -18,7 +18,7 @@ import java.util.List;
 @RepositoryRestResource(exported = false)
 public class Person {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "firstname")
     private String firstname;

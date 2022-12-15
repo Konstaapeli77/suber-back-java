@@ -20,7 +20,7 @@ import java.util.List;
 @RepositoryRestResource(exported = false)
 public class Service {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "name")
     private String name;
