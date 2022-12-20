@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -33,7 +34,8 @@ public class CompanyServiceImpl implements CompanyService {
                 .orElse(null);
 
         if (existingCompany == null) {
-            existingCompany = repository.save(DataMapper.getInstance().convertToEntity(companyDTO));
+            Company ext = DataMapper.getInstance().convertToEntity(companyDTO);
+            existingCompany = repository.save(ext);
         }
         else
             throw new EntityAlreadyExistsException(
@@ -44,15 +46,26 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<CompanyDTO> findAll() {
+
+        /*
+
         List<CompanyDTO> companiesDTO = new ArrayList<CompanyDTO>();
         List<Company> companies = new ArrayList<Company>();
+
         repository.findAll().forEach(companies::add);
+
         for (Company company:companies) {
             CompanyDTO companyDTO = DataMapper.getInstance().convertToDto(company);
             companiesDTO.add(companyDTO);
         }
-
         return companiesDTO;
+         */
+
+        return repository.findAll().stream()
+                .map(company -> DataMapper.getInstance().convertToDto(company))
+                .collect(Collectors.toList());
+
+
     }
 
     @Override

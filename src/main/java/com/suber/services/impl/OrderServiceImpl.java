@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -65,6 +66,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDTO> findAll() {
+        /*
         List<OrderDTO> ordersDTO = new ArrayList<OrderDTO>();
         List<Order> orders = new ArrayList<Order>();
         orderRepository.findAll().forEach(orders::add);
@@ -73,6 +75,11 @@ public class OrderServiceImpl implements OrderService {
             ordersDTO.add(orderDTO);
         }
         return ordersDTO;
+        */
+
+        return orderRepository.findAll().stream()
+                .map(order -> DataMapper.getInstance().convertToDto(order))
+                .collect(Collectors.toList());
     }
 
     @Override

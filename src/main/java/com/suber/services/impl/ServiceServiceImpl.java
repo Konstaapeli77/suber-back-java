@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 public class ServiceServiceImpl implements ServiceService {
@@ -58,6 +59,7 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public List<ServiceDTO> findAll() {
+/*
         List<ServiceDTO> servicesDTO = new ArrayList<ServiceDTO>();
         List<Service> services = new ArrayList<Service>();
         serviceRepository.findAll().forEach(services::add);
@@ -66,6 +68,10 @@ public class ServiceServiceImpl implements ServiceService {
             servicesDTO.add(serviceDTO);
         }
         return servicesDTO;
+*/
+        return serviceRepository.findAll().stream()
+                .map(service -> DataMapper.getInstance().convertToDto(service))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -75,6 +81,7 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public List<ServiceDTO> findByName(String id) {
+/*
         List<ServiceDTO> servicesDTO = new ArrayList<ServiceDTO>();
         List<Service> services = new ArrayList<Service>();
         serviceRepository.findByName(id).forEach(services::add);
@@ -83,6 +90,10 @@ public class ServiceServiceImpl implements ServiceService {
             servicesDTO.add(serviceDTO);
         }
         return servicesDTO;
+*/
+        return serviceRepository.findByName(id).stream()
+                .map(service -> DataMapper.getInstance().convertToDto(service))
+                .collect(Collectors.toList());
     }
 
     public void deleteAll() {

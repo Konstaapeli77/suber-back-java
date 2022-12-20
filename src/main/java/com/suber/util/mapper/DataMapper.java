@@ -26,7 +26,8 @@ public final class DataMapper {
     }
 
     public Company convertToEntity(CompanyDTO dto) {
-        return modelMapper.map(dto, Company.class);
+        Company company = modelMapper.map(dto, Company.class);
+        return company;
     }
 
     public CompanyDTO convertToDto(Company entity) {

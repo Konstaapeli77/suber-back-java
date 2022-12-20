@@ -298,18 +298,6 @@ class CompanyControllerTest {
     }
 
     @Test
-    public void exceptionThrownFromGetCompanyById() {
-        Exception exception = assertThrows(NumberFormatException.class, () -> {
-            Integer.parseInt("1a");
-        });
-
-        String expectedMessage = "For input string";
-        String actualMessage = exception.getMessage();
-
-        Assert.assertTrue(actualMessage.contains(expectedMessage));
-    }
-
-    @Test
     public void resourceNotFoundResponseSentFromGetCompanyById() {
         long wrongId = 100000;
 

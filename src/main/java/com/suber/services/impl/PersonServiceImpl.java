@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonServiceImpl implements PersonService {
@@ -70,6 +71,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<PersonDTO> findAll() {
+/*
         List<PersonDTO> personsDTO = new ArrayList<PersonDTO>();
         List<Person> persons = new ArrayList<Person>();
         personRepository.findAll().forEach(persons::add);
@@ -78,6 +80,10 @@ public class PersonServiceImpl implements PersonService {
             personsDTO.add(personDTO);
         }
         return personsDTO;
+*/
+        return personRepository.findAll().stream()
+                .map(person -> DataMapper.getInstance().convertToDto(person))
+                .collect(Collectors.toList());
     }
 
     @Override

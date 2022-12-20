@@ -1,13 +1,7 @@
 package com.suber.util;
 
-import com.suber.data.Address;
-import com.suber.data.Company;
-import com.suber.data.Order;
-import com.suber.data.Service;
-import com.suber.dto.AddressDTO;
-import com.suber.dto.CompanyDTO;
-import com.suber.dto.OrderDTO;
-import com.suber.dto.ServiceDTO;
+import com.suber.data.*;
+import com.suber.dto.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,7 +24,7 @@ public class TestData {
                 .build();
     }
 
-    public static List<Service> getService() {
+    public static List<Service> getServiceList() {
 
         Service service = Service.builder()
                 .description("Lumityöt lapiolla.")
@@ -40,24 +34,48 @@ public class TestData {
         return List.of(service);
     }
 
-    public static List<Order> getOrder() {
+    public static Service getService() {
+
+        Service service = Service.builder()
+                .name("Lumitöitä")
+                .description("Lumityöt lapiolla.")
+                .price(new BigDecimal(11.0))
+                .workers(null)
+                .build();
+        return service;
+    }
+
+    public static List<Order> getOrderList() {
         Order order = Order.builder()
                 .address(getAddress())
                 .reference("23211")
                 .customer(null)
                 .provider(null)
                 .price(new BigDecimal(21))
-                .services(getService())
+                .services(getServiceList())
                 .build();
 
         return List.of(order);
     }
 
+    public static Order getOrder() {
+        Order order = Order.builder()
+                .address(getAddress())
+                .reference("23211")
+                .customer(null)
+                .provider(null)
+                .price(new BigDecimal(21))
+                .services(getServiceList())
+                .build();
+
+        return order;
+    }
+
     public static Company getCompany() {
 
         return Company.builder()
-                .orders(getOrder())
-                .services(getService())
+                .orders(List.of(getOrder()))
+                .services(getServiceList())
                 .name("Valtor Oy")
                 .businessId("12314-1")
                 .address(getAddress())
@@ -90,6 +108,22 @@ public class TestData {
                 .price(new BigDecimal(123))
                 .name("Lumitöitä")
                 .description("Short description. Lorem Ipsum. Lorem jne.")
+                .build();
+    }
+
+    public static PersonDTO getPersonDTO() {
+        return PersonDTO.builder()
+                .firstname("Mikko")
+                .lastname("Mallikas")
+                .address(getAddressDTO())
+                .build();
+    }
+
+    public static Person getPerson() {
+        return Person.builder()
+                .firstname("Mikko")
+                .lastname("Mallikas")
+                .address(getAddress())
                 .build();
     }
 
