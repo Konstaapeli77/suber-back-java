@@ -71,7 +71,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<PersonDTO> findAll() {
-/*
+/*      Functional
         List<PersonDTO> personsDTO = new ArrayList<PersonDTO>();
         List<Person> persons = new ArrayList<Person>();
         personRepository.findAll().forEach(persons::add);
@@ -81,6 +81,7 @@ public class PersonServiceImpl implements PersonService {
         }
         return personsDTO;
 */
+
         return personRepository.findAll().stream()
                 .map(person -> DataMapper.getInstance().convertToDto(person))
                 .collect(Collectors.toList());
