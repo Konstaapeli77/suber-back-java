@@ -23,7 +23,6 @@ class RatingServiceImpl implements RatingService {
 
     @Override
     Optional<Rating> findById(long ratingId) {
-        distance("" , "G");
         ratingRepository.findById(ratingId)
     }
 
